@@ -2,226 +2,148 @@
 <html lang="th">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>AI Energy & Carbon Management</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#68778e;--line:#dfe6ef;--primary:#0f766e;--p2:#14b8a6;--nav:#0b1f33;--danger:#b91c1c;--ok:#166534;--warn:#92400e;--shadow:0 8px 28px rgba(20,35,60,.08)}
-*{box-sizing:border-box}body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}
-.hidden{display:none!important}.screen{min-height:100vh}.center{display:grid;place-items:center;padding:24px;background:linear-gradient(145deg,#071827,#0f766e)}
-.auth{width:min(460px,100%);background:#fff;border-radius:20px;padding:28px;box-shadow:0 20px 60px rgba(0,0,0,.24)}
-.auth h1{font-size:25px;margin:0 0 7px}.muted{color:var(--muted);font-size:13px;line-height:1.6}.tabs{display:flex;gap:8px;margin:20px 0 14px}.tabs button{flex:1}
-.app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:var(--nav);color:#fff;padding:22px 15px;position:sticky;top:0;height:100vh}.brand{font-size:20px;font-weight:800;margin:0 7px 20px}.brand small{display:block;color:#87ddd4;font-size:11px;margin-top:6px;font-weight:500}
-.menu button{width:100%;border:0;background:transparent;color:#d6e4ef;text-align:left;padding:11px 12px;border-radius:9px;margin:2px 0;cursor:pointer}.menu button.active,.menu button:hover{background:#143550;color:#fff}.main{padding:24px}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.top h1{margin:0;font-size:26px}.userbox{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.badge{background:#e7f8f5;color:#0f766e;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}
-.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.kpi{grid-column:span 3}.span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}.label{font-size:12px;color:var(--muted)}.value{font-size:28px;font-weight:800;margin-top:10px}.unit{font-size:12px;color:var(--muted)}.title{font-size:16px;font-weight:800;margin-bottom:12px}.section{display:none}.section.active{display:block}
-.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}input,select,textarea{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px 11px;background:#fff;font:inherit}textarea{min-height:85px}.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.btn.danger{background:#fee2e2;color:#991b1b}.btn:disabled{opacity:.55;cursor:not-allowed}table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}th{background:#f8fafc;color:var(--muted)}.msg{padding:10px 12px;border-radius:9px;margin-top:12px;font-size:13px}.msg.ok{background:#dcfce7;color:var(--ok)}.msg.bad{background:#fee2e2;color:var(--danger)}.msg.warn{background:#fef3c7;color:var(--warn)}.insight{border-left:4px solid var(--p2);padding:12px 14px;background:#f0fdfa;border-radius:8px;margin:8px 0}.loader{padding:25px;text-align:center;color:var(--muted)}
-@media(max-width:950px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.kpi{grid-column:span 6}.span4,.span6,.span8{grid-column:span 12}.row{grid-template-columns:1fr 1fr}}@media(max-width:600px){.main{padding:14px}.row{grid-template-columns:1fr}.kpi{grid-column:span 12}.top{flex-direction:column}}
+:root{--bg:#f3f6fa;--panel:#fff;--ink:#182335;--muted:#66758a;--line:#dce4ee;--nav:#0a2034;--p:#0f766e;--p2:#14b8a6;--ok:#15803d;--warn:#d97706;--bad:#dc2626;--shadow:0 8px 26px rgba(18,38,63,.08)}
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}button,input,select,textarea{font:inherit}.hidden{display:none!important}
+.app{display:grid;grid-template-columns:255px 1fr;min-height:100vh}.side{background:var(--nav);color:#fff;padding:20px 15px;position:sticky;top:0;height:100vh;overflow:auto}.brand{font-size:20px;font-weight:800;line-height:1.3;margin:2px 8px 18px}.brand small{display:block;color:#84d9d0;font-size:12px;margin-top:5px}.menu button{width:100%;border:0;background:transparent;color:#d8e4ee;text-align:left;padding:11px 12px;border-radius:9px;cursor:pointer;margin:2px 0}.menu button:hover,.menu button.active{background:#153851;color:#fff}.userbox{margin-top:18px;border-top:1px solid #29475f;padding:14px 8px;font-size:12px;color:#c9d8e5}.main{padding:22px}.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:18px}.top h1{margin:0;font-size:25px}.sub{font-size:13px;color:var(--muted);margin-top:4px}.badge{padding:7px 10px;border-radius:999px;background:#e7f8f5;color:#0f766e;font-size:12px;font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.span12{grid-column:span 12}.span8{grid-column:span 8}.span6{grid-column:span 6}.span4{grid-column:span 4}.kpi{grid-column:span 2;min-height:108px}.label{font-size:12px;color:var(--muted)}.value{font-size:26px;font-weight:800;margin-top:10px}.unit{font-size:12px;color:var(--muted)}.title{font-weight:800;margin-bottom:12px}.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}input,select,textarea{width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff}textarea{min-height:80px}.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--p);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#23384f}.btn.danger{background:var(--bad)}.btn.sm{padding:6px 9px;font-size:12px}.actions{display:flex;gap:8px;flex-wrap:wrap}.msg{padding:10px 12px;border-radius:8px;margin:10px 0;font-size:13px;background:#eff6ff;color:#1e40af}.msg.ok{background:#ecfdf5;color:#166534}.msg.warn{background:#fffbeb;color:#92400e}.msg.bad{background:#fef2f2;color:#991b1b}
+table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f8fafc;color:var(--muted)}.pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}.pill.s1{background:#fee2e2;color:#991b1b}.pill.s2{background:#fef3c7;color:#92400e}.pill.s3{background:#dbeafe;color:#1d4ed8}.pill.ok{background:#dcfce7;color:#166534}.progress{height:10px;border-radius:999px;background:#e8eef5;overflow:hidden}.progress>div{height:100%;background:var(--p2)}.note{font-size:12px;color:var(--muted);line-height:1.55}.section{display:none}.section.active{display:block}.metricline{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line)}
+.auth{min-height:100vh;display:grid;place-items:center;padding:20px;background:linear-gradient(135deg,#071d31,#0f766e)}.authcard{width:min(480px,100%);background:#fff;padding:24px;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.25)}.authcard h2{margin-top:0}.tabs{display:flex;gap:8px;margin-bottom:15px}.tabs button{flex:1}.setup{max-width:720px;margin:50px auto}.factorwarn{border-left:4px solid #f59e0b;background:#fffbeb;padding:12px;border-radius:8px}.empty{text-align:center;color:var(--muted);padding:24px}.statrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{padding:12px;background:#f8fafc;border-radius:10px}.stat b{font-size:20px;display:block;margin-top:4px}
+@media(max-width:1050px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.kpi{grid-column:span 4}.span4,.span6,.span8{grid-column:span 12}.row{grid-template-columns:1fr 1fr}}@media(max-width:650px){.main{padding:12px}.kpi{grid-column:span 6}.row,.statrow{grid-template-columns:1fr}.top{flex-direction:column}.tablewrap{overflow:auto}}
 </style>
 </head>
 <body>
-<div id="loading" class="screen center"><div class="auth"><div class="loader">กำลังเชื่อมต่อระบบ...</div></div></div>
-
-<div id="authScreen" class="screen center hidden">
-  <div class="auth">
-    <h1>AI Energy & Carbon</h1>
-    <div class="muted">ระบบบริหารจัดการพลังงานและคาร์บอนสำหรับองค์กร</div>
-    <div class="tabs"><button class="btn" id="tabLogin">เข้าสู่ระบบ</button><button class="btn secondary" id="tabSignup">สมัครใช้งาน</button></div>
-    <div id="loginPane">
-      <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="email"></div><br>
-      <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div><br>
-      <button class="btn" id="loginBtn">เข้าสู่ระบบ</button>
-    </div>
-    <div id="signupPane" class="hidden">
-      <div class="field"><label>ชื่อ-นามสกุล</label><input id="signupName"></div><br>
-      <div class="field"><label>Email</label><input id="signupEmail" type="email"></div><br>
-      <div class="field"><label>Password (อย่างน้อย 8 ตัวอักษร)</label><input id="signupPassword" type="password"></div><br>
-      <button class="btn" id="signupBtn">สร้างบัญชี</button>
-    </div>
+<div id="authView" class="auth">
+  <div class="authcard">
+    <h2>AI Energy & Carbon Management</h2>
+    <p class="note">เข้าสู่ระบบเพื่อบันทึกข้อมูลพลังงานและคาร์บอนขององค์กร</p>
+    <div class="tabs"><button class="btn" id="tabLogin" onclick="showAuth('login')">เข้าสู่ระบบ</button><button class="btn secondary" id="tabSignup" onclick="showAuth('signup')">สมัครใช้งาน</button></div>
+    <div class="field"><label>Email</label><input id="authEmail" type="email" placeholder="name@company.com"></div><br>
+    <div class="field"><label>Password</label><input id="authPassword" type="password" placeholder="อย่างน้อย 6 ตัวอักษร"></div><br>
+    <div id="signupName" class="field hidden"><label>ชื่อ-นามสกุล</label><input id="authName"></div>
+    <br><button class="btn" style="width:100%" id="authSubmit" onclick="submitAuth()">เข้าสู่ระบบ</button>
     <div id="authMsg"></div>
   </div>
 </div>
 
-<div id="onboardScreen" class="screen center hidden">
-  <div class="auth">
-    <h1>ตั้งค่าองค์กรครั้งแรก</h1>
-    <div class="muted">บัญชีนี้ยังไม่ได้ผูกกับองค์กร กรุณาสร้างองค์กรและ Site หลักก่อนเริ่มบันทึกข้อมูลจริง</div><br>
-    <div class="field"><label>ชื่อองค์กร *</label><input id="orgName" placeholder="เช่น ABC Manufacturing Co., Ltd."></div><br>
-    <div class="field"><label>รหัสองค์กร *</label><input id="orgCode" placeholder="เช่น ABC01"></div><br>
-    <div class="field"><label>ประเภทธุรกิจ</label><input id="businessType" placeholder="เช่น Manufacturing / Logistics"></div><br>
-    <div class="field"><label>ชื่อ Site หลัก</label><input id="siteName" value="Main Site"></div><br>
-    <button class="btn" id="createOrgBtn">สร้างองค์กรและเริ่มใช้งาน</button>
-    <button class="btn secondary" id="onboardLogout">ออกจากระบบ</button>
-    <div id="onboardMsg"></div>
-  </div>
+<div id="setupView" class="hidden">
+ <div class="setup card">
+  <h2>ตั้งค่าองค์กรครั้งแรก</h2><p class="note">สร้างองค์กรและ Site หลักก่อนเริ่มบันทึกข้อมูล</p>
+  <div class="row"><div class="field"><label>ชื่อองค์กร</label><input id="orgName" placeholder="บริษัท ABC จำกัด"></div><div class="field"><label>รหัสองค์กร</label><input id="orgCode" placeholder="ABC"></div><div class="field"><label>ประเภทธุรกิจ</label><input id="bizType" placeholder="Manufacturing"></div><div class="field"><label>ชื่อ Site หลัก</label><input id="siteName" value="Main Site"></div></div><br>
+  <div class="field"><label>รหัส Site</label><input id="siteCode" value="MAIN"></div><br>
+  <button class="btn" onclick="createOrganization()">สร้างองค์กร</button> <button class="btn secondary" onclick="logout()">ออกจากระบบ</button>
+  <div id="setupMsg"></div>
+ </div>
 </div>
 
-<div id="appScreen" class="app hidden">
-<aside class="side">
-  <div class="brand">AI Energy & Carbon<small>Supabase Connected • Real Data</small></div>
+<div id="appView" class="app hidden">
+ <aside class="side">
+  <div class="brand">AI Energy & Carbon<small>Management System for Organization</small></div>
   <div class="menu" id="menu">
-    <button class="active" data-page="dashboard">Dashboard</button>
-    <button data-page="energy">Energy Data</button>
-    <button data-page="carbon">Carbon Scope 1–3</button>
-    <button data-page="enpi">EnPI & SEU</button>
-    <button data-page="ai">AI Energy Manager</button>
-    <button data-page="dede">พพ. 8 ขั้นตอน</button>
+   <button class="active" data-page="dashboard">Dashboard</button>
+   <button data-page="energy">Energy Data</button>
+   <button data-page="carbon">Carbon Scope 1–3</button>
+   <button data-page="enpi">EnPI & SEU</button>
+   <button data-page="projects">Energy Projects</button>
+   <button data-page="ai">AI Energy Manager</button>
+   <button data-page="dede">พพ. 8 ขั้นตอน</button>
+   <button data-page="reports">Reports</button>
+   <button data-page="settings">Settings / Factors</button>
   </div>
-</aside>
-<main class="main">
-  <div class="top">
-    <div><h1 id="pageTitle">Executive Dashboard</h1><div class="muted" id="orgLabel">กำลังโหลดองค์กร...</div></div>
-    <div class="userbox"><span class="badge" id="userRole">USER</span><span class="muted" id="userEmail"></span><button class="btn secondary" id="logoutBtn">ออกจากระบบ</button></div>
-  </div>
+  <div class="userbox"><div id="orgLabel">-</div><div id="userLabel">-</div><br><button class="btn secondary sm" onclick="logout()">ออกจากระบบ</button></div>
+ </aside>
+ <main class="main">
+  <div class="top"><div><h1 id="pageTitle">Executive Dashboard</h1><div class="sub">ข้อมูลจริงจาก Supabase • Energy → Carbon อัตโนมัติ</div></div><div class="badge" id="liveBadge">LIVE DATABASE</div></div>
 
   <section id="dashboard" class="section active">
-    <div class="grid">
-      <div class="card kpi"><div class="label">Total Energy</div><div class="value" id="kEnergy">0</div><div class="unit">MJ</div></div>
-      <div class="card kpi"><div class="label">Energy Cost</div><div class="value" id="kCost">0</div><div class="unit">บาท</div></div>
-      <div class="card kpi"><div class="label">Records</div><div class="value" id="kRecords">0</div><div class="unit">รายการ</div></div>
-      <div class="card kpi"><div class="label">Latest Month</div><div class="value" id="kMonth">-</div><div class="unit">ข้อมูลล่าสุด</div></div>
-      <div class="card span8"><div class="title">Energy by Type</div><div id="energySummary" class="muted">ยังไม่มีข้อมูล</div></div>
-      <div class="card span4"><div class="title">AI Readiness</div><div class="insight">ระบบเชื่อมฐานข้อมูลจริงแล้ว ข้อมูล Energy ที่บันทึกจะพร้อมสำหรับ AI วิเคราะห์ Trend, Anomaly และ Recommendation ในเฟสถัดไป</div></div>
-    </div>
+   <div class="grid">
+    <div class="card kpi"><div class="label">Total Energy</div><div class="value" id="kEnergy">0</div><div class="unit">GJ</div></div>
+    <div class="card kpi"><div class="label">Energy Cost</div><div class="value" id="kCost">0</div><div class="unit">บาท</div></div>
+    <div class="card kpi"><div class="label">Scope 1</div><div class="value" id="kS1">0</div><div class="unit">tCO₂e</div></div>
+    <div class="card kpi"><div class="label">Scope 2</div><div class="value" id="kS2">0</div><div class="unit">tCO₂e</div></div>
+    <div class="card kpi"><div class="label">Scope 3</div><div class="value" id="kS3">0</div><div class="unit">tCO₂e</div></div>
+    <div class="card kpi"><div class="label">Total Carbon</div><div class="value" id="kCarbon">0</div><div class="unit">tCO₂e</div></div>
+    <div class="card span6"><div class="title">Carbon by Scope</div><div id="scopeSummary"></div></div>
+    <div class="card span6"><div class="title">Energy Summary</div><div id="energySummary"></div></div>
+    <div class="card span12"><div class="title">สถานะระบบคำนวณ</div><div class="msg ok">เมื่อบันทึก Energy Record ระบบจะค้นหา Emission Factor ที่ตรงกับประเภทพลังงาน + หน่วย และสร้าง Carbon Record อัตโนมัติ หากไม่มี Factor ที่ตรง ระบบจะไม่เดาค่าให้</div></div>
+   </div>
   </section>
 
   <section id="energy" class="section">
-    <div class="grid">
-      <div class="card span12"><div class="title">บันทึกข้อมูลพลังงานจริง</div>
-        <div class="row">
-          <div class="field"><label>Site *</label><select id="eSite"></select></div>
-          <div class="field"><label>เดือน *</label><input type="month" id="eMonth"></div>
-          <div class="field"><label>ประเภทพลังงาน *</label><select id="eType"><option>Electricity</option><option>Diesel</option><option>Gasoline</option><option>LPG</option><option>Natural Gas</option><option>Fuel Oil</option><option>Biomass</option><option>Solar</option><option>Steam</option><option>Other</option></select></div>
-          <div class="field"><label>หน่วย *</label><select id="eUnit"></select></div>
-        </div><br>
-        <div class="row">
-          <div class="field"><label>ปริมาณ *</label><input type="number" id="eQty" min="0" step="any" placeholder="เช่น 120000"></div>
-          <div class="field"><label>ค่าใช้จ่าย (บาท)</label><input type="number" id="eCost" min="0" step="any" placeholder="0"></div>
-          <div class="field"><label>เลข Invoice</label><input id="eInvoice" placeholder="Optional"></div>
-          <div class="field"><label>หมายเหตุ</label><input id="eNote" placeholder="Optional"></div>
-        </div><br>
-        <button class="btn" id="saveEnergyBtn">บันทึกข้อมูลพลังงาน</button>
-        <div id="energyMsg"></div>
-      </div>
-      <div class="card span12"><div class="title">รายการล่าสุด</div>
-        <div style="overflow:auto"><table><thead><tr><th>วันที่</th><th>Site</th><th>ประเภท</th><th>ปริมาณ</th><th>หน่วย</th><th>Energy (MJ)</th><th>ค่าใช้จ่าย</th><th>Factor Version</th></tr></thead><tbody id="energyRows"></tbody></table></div>
-      </div>
+   <div class="grid">
+    <div class="card span12"><div class="title">บันทึกข้อมูลพลังงานจริง</div>
+     <div class="row"><div class="field"><label>Site</label><select id="eSite"></select></div><div class="field"><label>เดือน</label><input type="month" id="eMonth"></div><div class="field"><label>ประเภทพลังงาน</label><select id="eType" onchange="syncEnergyUnits()"></select></div><div class="field"><label>หน่วย</label><select id="eUnit"></select></div></div><br>
+     <div class="row"><div class="field"><label>ปริมาณ</label><input type="number" step="any" id="eQty" placeholder="เช่น 120000"></div><div class="field"><label>ค่าใช้จ่าย (บาท)</label><input type="number" step="any" id="eCost" placeholder="0"></div><div class="field"><label>แหล่ง/มิเตอร์</label><input id="eSource" placeholder="Main meter / Boiler"></div><div class="field"><label>หมายเหตุ</label><input id="eNote"></div></div><br>
+     <button class="btn" onclick="addEnergy()">บันทึกข้อมูลพลังงาน</button><div id="energyMsg"></div>
     </div>
+    <div class="card span12"><div class="title">Energy Records</div><div class="tablewrap"><table><thead><tr><th>วันที่</th><th>ประเภท</th><th>ปริมาณ</th><th>หน่วย</th><th>Energy MJ</th><th>ค่าใช้จ่าย</th><th>Carbon</th><th></th></tr></thead><tbody id="energyRows"></tbody></table></div></div>
+   </div>
   </section>
 
-  <section id="carbon" class="section"><div class="card"><div class="title">Carbon Scope 1–3</div><div class="insight">ฐานข้อมูล Emission Factor เชื่อมต่อแล้ว ขั้นถัดไปจะผูก Energy Records → Carbon Records อัตโนมัติ พร้อมเก็บ Source / Year / Version เพื่อ Audit ย้อนกลับได้</div></div></section>
-  <section id="enpi" class="section"><div class="card"><div class="title">EnPI & SEU</div><div class="insight">โมดูลนี้จะใช้ Energy + Production Data จริง เพื่อคำนวณ EnPI และจัดอันดับ Significant Energy Use (SEU)</div></div></section>
-  <section id="ai" class="section"><div class="card"><div class="title">AI Energy Manager</div><div class="insight">AI จะวิเคราะห์ข้อมูลที่ผ่าน Calculation Engine เท่านั้น ไม่แก้ Conversion Factor หรือ Emission Factor เอง</div></div></section>
-  <section id="dede" class="section"><div class="card"><div class="title">พพ. 8 ขั้นตอน</div><ol><li>สถานภาพการจัดการพลังงานเบื้องต้น</li><li>นโยบายอนุรักษ์พลังงาน</li><li>คณะทำงานด้านการจัดการพลังงาน</li><li>การประเมินศักยภาพการอนุรักษ์พลังงาน</li><li>เป้าหมายและแผนอนุรักษ์พลังงาน</li><li>การดำเนินการตามแผน</li><li>การตรวจติดตามและประเมินผล</li><li>การทบทวน วิเคราะห์ และแก้ไขข้อบกพร่อง</li></ol></div></section>
-</main>
+  <section id="carbon" class="section">
+   <div class="grid">
+    <div class="card span12"><div class="title">Carbon Footprint — Scope 1 / 2 / 3</div>
+     <div class="statrow"><div class="stat">Scope 1<b id="cS1">0 tCO₂e</b></div><div class="stat">Scope 2<b id="cS2">0 tCO₂e</b></div><div class="stat">Scope 3<b id="cS3">0 tCO₂e</b></div></div>
+    </div>
+    <div class="card span6"><div class="title">เพิ่มกิจกรรมคาร์บอนโดยตรง</div><p class="note">ใช้สำหรับ Refrigerant, Business Travel, Waste, Water, Purchased Goods และรายการที่ไม่ได้มาจาก Energy Record</p>
+     <div class="field"><label>Emission Factor</label><select id="cFactor" onchange="showFactorInfo()"></select></div><br>
+     <div class="row"><div class="field"><label>วันที่</label><input type="date" id="cDate"></div><div class="field"><label>Activity Data</label><input type="number" step="any" id="cQty"></div><div class="field"><label>Site</label><select id="cSite"></select></div><div class="field"><label>ผลคำนวณ</label><input id="cPreview" readonly></div></div><br>
+     <button class="btn" onclick="addCarbonActivity()">บันทึก Carbon Activity</button><div id="carbonMsg"></div>
+    </div>
+    <div class="card span6"><div class="title">Factor ที่เลือก</div><div id="factorInfo" class="factorwarn">เลือก Emission Factor เพื่อดู Source / Version</div></div>
+    <div class="card span12"><div class="title">Carbon Records</div><div class="tablewrap"><table><thead><tr><th>วันที่</th><th>Scope</th><th>Activity</th><th>Activity Data</th><th>EF</th><th>kgCO₂e</th><th>tCO₂e</th><th>Source / Version</th></tr></thead><tbody id="carbonRows"></tbody></table></div></div>
+   </div>
+  </section>
+
+  <section id="enpi" class="section"><div class="grid"><div class="card span6"><div class="title">EnPI Calculator</div><div class="field"><label>Energy (kWh)</label><input id="enEnergy" type="number" value="120000"></div><br><div class="field"><label>Production</label><input id="enProd" type="number" value="40000"></div><br><button class="btn" onclick="calcEnpi()">คำนวณ</button><div id="enpiResult" class="msg">EnPI = 3.00 kWh/unit</div></div><div class="card span6"><div class="title">SEU</div><p class="note">ขั้นต่อไปจะเชื่อม Equipment/Meter เพื่อจัดอันดับ Significant Energy Use จากข้อมูลจริง</p></div></div></section>
+
+  <section id="projects" class="section"><div class="card"><div class="title">Energy Conservation Projects</div><p class="note">โครงสร้างฐานข้อมูลพร้อมสำหรับ Investment, Saving, Payback และ Carbon Reduction — จะเชื่อมหน้า Project ในเฟสถัดไป</p></div></section>
+  <section id="ai" class="section"><div class="card"><div class="title">AI Energy Manager</div><div class="msg">AI จะอ่านผลจาก Calculation Engine และ Carbon Engine เท่านั้น ไม่แก้ Formula หรือ Factor เอง</div><p class="note">เฟสถัดไป: AI Insight, anomaly detection, forecast และ recommendation จากข้อมูลจริง</p></div></section>
+  <section id="dede" class="section"><div class="card"><div class="title">การจัดการพลังงานตาม พพ. — 8 ขั้นตอน</div><ol><li>สถานภาพการจัดการพลังงานเบื้องต้น</li><li>นโยบายอนุรักษ์พลังงาน</li><li>คณะทำงานด้านการจัดการพลังงาน</li><li>การประเมินศักยภาพการอนุรักษ์พลังงาน</li><li>เป้าหมายและแผนอนุรักษ์พลังงาน</li><li>การดำเนินการตามแผน</li><li>การตรวจติดตามและประเมินผล</li><li>การทบทวน วิเคราะห์ และแก้ไขข้อบกพร่อง</li></ol></div></section>
+  <section id="reports" class="section"><div class="card"><div class="title">Reports</div><button class="btn" onclick="exportEnergyCSV()">Export Energy CSV</button> <button class="btn secondary" onclick="exportCarbonCSV()">Export Carbon CSV</button></div></section>
+  <section id="settings" class="section"><div class="grid"><div class="card span6"><div class="title">Conversion Factors</div><div class="tablewrap"><table><thead><tr><th>Energy</th><th>Unit</th><th>→ MJ</th><th>Version</th></tr></thead><tbody id="convRows"></tbody></table></div></div><div class="card span6"><div class="title">Emission Factors</div><div class="factorwarn"><b>สำคัญ:</b> Factor หลายรายการในฐานข้อมูลถูกระบุว่าเป็น “ตัวอย่าง – โปรดตรวจสอบ” จึงต้องอัปเดตเป็นค่าทางการก่อนใช้รายงานจริง</div><br><div class="tablewrap"><table><thead><tr><th>Scope</th><th>Activity</th><th>EF</th><th>Version</th></tr></thead><tbody id="efRows"></tbody></table></div></div></div></section>
+ </main>
 </div>
 
 <script>
 const SUPABASE_URL='https://fjkhhnuftrzpssodaeho.supabase.co';
 const SUPABASE_KEY='sb_publishable_05iZBWSteuTbG1z6W9tFrA_T99xb-jE';
-const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let session=null,profile=null,organization=null,sites=[],energyRecords=[];
-const $=id=>document.getElementById(id);
-function showOnly(id){['loading','authScreen','onboardScreen','appScreen'].forEach(x=>$(x).classList.toggle('hidden',x!==id));}
-function msg(id,text,type='ok'){const el=$(id);el.className='msg '+type;el.textContent=text;}
-function clearMsg(id){const el=$(id);el.className='';el.textContent='';}
-function money(n){return Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:2});}
-function num(n,d=2){return Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:d});}
-
-async function boot(){
-  const {data}=await db.auth.getSession(); session=data.session;
-  if(!session){showOnly('authScreen');return;}
-  await loadProfile();
-}
-async function loadProfile(){
-  const {data,error}=await db.from('profiles').select('*').eq('id',session.user.id).single();
-  if(error){console.error(error);showOnly('authScreen');msg('authMsg','อ่าน Profile ไม่สำเร็จ: '+error.message,'bad');return;}
-  profile=data;
-  if(!profile.organization_id){showOnly('onboardScreen');return;}
-  await loadApp();
-}
-async function loadApp(){
-  showOnly('appScreen');
-  $('userEmail').textContent=session.user.email||'';$('userRole').textContent=(profile.role||'user').toUpperCase();
-  const [orgRes,siteRes]=await Promise.all([
-    db.from('organizations').select('*').eq('id',profile.organization_id).single(),
-    db.from('sites').select('*').eq('organization_id',profile.organization_id).eq('active_status',true).order('site_name')
-  ]);
-  if(orgRes.error){console.error(orgRes.error);$('orgLabel').textContent='ไม่สามารถโหลดข้อมูลองค์กร';return;}
-  organization=orgRes.data;sites=siteRes.data||[];
-  $('orgLabel').textContent=organization.organization_name+' • ปีรายงาน '+(organization.reporting_year||'-');
-  $('eSite').innerHTML=sites.map(s=>`<option value="${s.id}">${escapeHtml(s.site_name)} (${escapeHtml(s.site_code)})</option>`).join('');
-  await updateUnits();await loadEnergy();
-}
-function escapeHtml(v){return String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-
-$('tabLogin').onclick=()=>{$('loginPane').classList.remove('hidden');$('signupPane').classList.add('hidden');$('tabLogin').className='btn';$('tabSignup').className='btn secondary';clearMsg('authMsg')};
-$('tabSignup').onclick=()=>{$('signupPane').classList.remove('hidden');$('loginPane').classList.add('hidden');$('tabSignup').className='btn';$('tabLogin').className='btn secondary';clearMsg('authMsg')};
-$('loginBtn').onclick=async()=>{
-  clearMsg('authMsg');const email=$('loginEmail').value.trim(),password=$('loginPassword').value;
-  if(!email||!password){msg('authMsg','กรุณากรอก Email และ Password','warn');return;}
-  $('loginBtn').disabled=true;
-  const {data,error}=await db.auth.signInWithPassword({email,password});$('loginBtn').disabled=false;
-  if(error){msg('authMsg',error.message,'bad');return;}session=data.session;await loadProfile();
-};
-$('signupBtn').onclick=async()=>{
-  clearMsg('authMsg');const full_name=$('signupName').value.trim(),email=$('signupEmail').value.trim(),password=$('signupPassword').value;
-  if(!full_name||!email||password.length<8){msg('authMsg','กรอกชื่อ Email และ Password อย่างน้อย 8 ตัวอักษร','warn');return;}
-  $('signupBtn').disabled=true;
-  const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name}}});$('signupBtn').disabled=false;
-  if(error){msg('authMsg',error.message,'bad');return;}
-  if(data.session){session=data.session;await loadProfile();}else msg('authMsg','สร้างบัญชีแล้ว กรุณาตรวจ Email เพื่อยืนยันบัญชี แล้วกลับมาเข้าสู่ระบบ','ok');
-};
-async function logout(){await db.auth.signOut();location.reload()} $('logoutBtn').onclick=logout;$('onboardLogout').onclick=logout;
-
-$('createOrgBtn').onclick=async()=>{
-  clearMsg('onboardMsg');const name=$('orgName').value.trim(),code=$('orgCode').value.trim();
-  if(!name||!code){msg('onboardMsg','กรุณากรอกชื่อองค์กรและรหัสองค์กร','warn');return;}
-  $('createOrgBtn').disabled=true;
-  const {error}=await db.rpc('create_my_organization',{p_organization_name:name,p_organization_code:code,p_business_type:$('businessType').value.trim()||null,p_site_name:$('siteName').value.trim()||'Main Site',p_site_code:'MAIN'});
-  $('createOrgBtn').disabled=false;
-  if(error){msg('onboardMsg',error.message,'bad');return;}
-  msg('onboardMsg','สร้างองค์กรสำเร็จ กำลังเข้าสู่ระบบ...','ok');await loadProfile();
-};
-
-const titles={dashboard:'Executive Dashboard',energy:'Energy Data',carbon:'Carbon Scope 1–3',enpi:'EnPI & SEU',ai:'AI Energy Manager',dede:'พพ. 8 ขั้นตอน'};
-document.querySelectorAll('#menu button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#menu button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));$(b.dataset.page).classList.add('active');$('pageTitle').textContent=titles[b.dataset.page]||b.textContent;});
-
-$('eType').onchange=updateUnits;
-async function updateUnits(){
-  const type=$('eType').value;
-  const {data,error}=await db.from('conversion_factors').select('source_unit').eq('energy_type',type).eq('active_status',true).order('source_unit');
-  if(error){console.error(error);$('eUnit').innerHTML='<option>ไม่มี Factor</option>';return;}
-  const units=[...new Set((data||[]).map(x=>x.source_unit))];$('eUnit').innerHTML=units.map(u=>`<option>${escapeHtml(u)}</option>`).join('');
-}
-$('saveEnergyBtn').onclick=saveEnergy;
-async function saveEnergy(){
-  clearMsg('energyMsg');
-  const site_id=$('eSite').value,monthVal=$('eMonth').value,energy_type=$('eType').value,unit=$('eUnit').value,quantity=Number($('eQty').value),cost=$('eCost').value===''?null:Number($('eCost').value);
-  if(!site_id||!monthVal||!quantity||quantity<0){msg('energyMsg','กรุณากรอก Site, เดือน และปริมาณให้ครบ','warn');return;}
-  const {data:factors,error:ferr}=await db.from('conversion_factors').select('id,conversion_factor,version').eq('energy_type',energy_type).eq('source_unit',unit).eq('target_unit','MJ').eq('active_status',true).order('valid_from',{ascending:false}).limit(1);
-  if(ferr||!factors?.length){msg('energyMsg','ไม่พบ Conversion Factor สำหรับ '+energy_type+' / '+unit,'bad');return;}
-  const factor=factors[0],energy_mj=quantity*Number(factor.conversion_factor),[year,month]=monthVal.split('-').map(Number),record_date=`${year}-${String(month).padStart(2,'0')}-01`;
-  const payload={organization_id:profile.organization_id,site_id,record_date,year,month,period_type:'monthly',input_channel:'web',energy_type,source_name:'Manual Entry',quantity,unit,cost,invoice_number:$('eInvoice').value.trim()||null,note:$('eNote').value.trim()||null,kwh:energy_type==='Electricity'&&unit==='kWh'?quantity:null,energy_mj,conversion_factor_id:factor.id,conversion_factor_value:factor.conversion_factor,conversion_factor_version:factor.version,calc_status:'calculated',created_by:session.user.id};
-  $('saveEnergyBtn').disabled=true;const {error}=await db.from('energy_records').insert(payload);$('saveEnergyBtn').disabled=false;
-  if(error){msg('energyMsg','บันทึกไม่สำเร็จ: '+error.message,'bad');return;}
-  msg('energyMsg',`บันทึกสำเร็จ • ${num(energy_mj)} MJ • Factor ${factor.version}`,'ok');$('eQty').value='';$('eCost').value='';$('eInvoice').value='';$('eNote').value='';await loadEnergy();
-}
-async function loadEnergy(){
-  const {data,error}=await db.from('energy_records').select('id,record_date,site_id,energy_type,quantity,unit,energy_mj,cost,conversion_factor_version').eq('organization_id',profile.organization_id).order('record_date',{ascending:false}).order('created_at',{ascending:false}).limit(100);
-  if(error){console.error(error);return;}energyRecords=data||[];renderEnergy();renderDashboard();
-}
-function renderEnergy(){
-  const siteMap=Object.fromEntries(sites.map(s=>[s.id,s.site_name]));
-  $('energyRows').innerHTML=energyRecords.length?energyRecords.map(r=>`<tr><td>${escapeHtml(r.record_date)}</td><td>${escapeHtml(siteMap[r.site_id]||'-')}</td><td>${escapeHtml(r.energy_type)}</td><td>${num(r.quantity,4)}</td><td>${escapeHtml(r.unit)}</td><td>${num(r.energy_mj)}</td><td>${money(r.cost)}</td><td>${escapeHtml(r.conversion_factor_version||'-')}</td></tr>`).join(''):'<tr><td colspan="8" class="muted">ยังไม่มีข้อมูลพลังงาน</td></tr>';
-}
-function renderDashboard(){
-  const totalMJ=energyRecords.reduce((s,r)=>s+Number(r.energy_mj||0),0),totalCost=energyRecords.reduce((s,r)=>s+Number(r.cost||0),0);
-  $('kEnergy').textContent=num(totalMJ,0);$('kCost').textContent=money(totalCost);$('kRecords').textContent=energyRecords.length;$('kMonth').textContent=energyRecords[0]?.record_date?.slice(0,7)||'-';
-  const by={};energyRecords.forEach(r=>by[r.energy_type]=(by[r.energy_type]||0)+Number(r.energy_mj||0));
-  $('energySummary').innerHTML=Object.keys(by).length?`<table><thead><tr><th>ประเภทพลังงาน</th><th>MJ</th><th>%</th></tr></thead><tbody>${Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<tr><td>${escapeHtml(k)}</td><td>${num(v,0)}</td><td>${totalMJ?num(v/totalMJ*100,1):0}%</td></tr>`).join('')}</tbody></table>`:'ยังไม่มีข้อมูล';
-}
-
-db.auth.onAuthStateChange((event,newSession)=>{if(event==='SIGNED_OUT'){session=null;showOnly('authScreen')}else if(newSession)session=newSession;});
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let authMode='login',session=null,profile=null,org=null,sites=[],energy=[],carbon=[],conv=[],efs=[];
+const titles={dashboard:'Executive Dashboard',energy:'Energy Data',carbon:'Carbon Scope 1–3',enpi:'EnPI & SEU',projects:'Energy Projects',ai:'AI Energy Manager',dede:'พพ. 8 ขั้นตอน',reports:'Reports',settings:'Settings / Factors'};
+const $=id=>document.getElementById(id); const fmt=(n,d=2)=>Number(n||0).toLocaleString('th-TH',{maximumFractionDigits:d});
+function message(id,text,type=''){ $(id).innerHTML=`<div class="msg ${type}">${text}</div>` }
+function showAuth(mode){authMode=mode;$('signupName').classList.toggle('hidden',mode!=='signup');$('authSubmit').textContent=mode==='signup'?'สมัครใช้งาน':'เข้าสู่ระบบ';$('tabLogin').className='btn '+(mode==='login'?'':'secondary');$('tabSignup').className='btn '+(mode==='signup'?'':'secondary');$('authMsg').innerHTML=''}
+async function submitAuth(){const email=$('authEmail').value.trim(),password=$('authPassword').value,name=$('authName').value.trim();if(!email||!password){message('authMsg','กรอก Email และ Password','bad');return}try{if(authMode==='signup'){const {data,error}=await db.auth.signUp({email,password,options:{data:{full_name:name}}});if(error)throw error;if(data.session){await boot()}else message('authMsg','สมัครแล้ว กรุณาตรวจ Email เพื่อยืนยันบัญชีก่อนเข้าสู่ระบบ','ok')}else{const {error}=await db.auth.signInWithPassword({email,password});if(error)throw error;await boot()}}catch(e){message('authMsg',e.message,'bad')}}
+async function logout(){await db.auth.signOut();location.reload()}
+async function boot(){const {data:{session:s}}=await db.auth.getSession();session=s;if(!s){$('authView').classList.remove('hidden');return}$('authView').classList.add('hidden');const {data:p,error}=await db.from('profiles').select('*').eq('id',s.user.id).maybeSingle();if(error){alert(error.message);return}profile=p;if(!profile?.organization_id){$('setupView').classList.remove('hidden');return}await loadAll();$('setupView').classList.add('hidden');$('appView').classList.remove('hidden')}
+async function createOrganization(){const name=$('orgName').value.trim(),code=$('orgCode').value.trim(),biz=$('bizType').value.trim(),sn=$('siteName').value.trim(),sc=$('siteCode').value.trim();if(!name||!code||!sn||!sc){message('setupMsg','กรอกข้อมูลที่จำเป็นให้ครบ','bad');return}const {error}=await db.rpc('create_my_organization',{p_organization_name:name,p_organization_code:code,p_business_type:biz||null,p_site_name:sn,p_site_code:sc});if(error){message('setupMsg',error.message,'bad');return}message('setupMsg','สร้างองค์กรสำเร็จ กำลังโหลด...','ok');setTimeout(()=>location.reload(),600)}
+async function loadAll(){const oid=profile.organization_id;const [o,s,e,c,cv,ef]=await Promise.all([db.from('organizations').select('*').eq('id',oid).single(),db.from('sites').select('*').eq('organization_id',oid).eq('active_status',true).order('site_name'),db.from('energy_records').select('*').eq('organization_id',oid).order('record_date',{ascending:false}).limit(100),db.from('carbon_records').select('*').eq('organization_id',oid).order('record_date',{ascending:false}).limit(200),db.from('conversion_factors').select('*').eq('active_status',true).order('energy_type'),db.from('emission_factors').select('*').eq('active_status',true).order('scope').order('activity_name')]);
+ for(const r of [o,s,e,c,cv,ef]) if(r.error){console.error(r.error)} org=o.data;sites=s.data||[];energy=e.data||[];carbon=c.data||[];conv=cv.data||[];efs=ef.data||[];$('orgLabel').textContent=org?.organization_name||'องค์กร';$('userLabel').textContent=(profile.full_name||session.user.email)+' • '+profile.role;populateSelectors();renderAll()}
+function populateSelectors(){const siteOpts=sites.map(x=>`<option value="${x.id}">${x.site_name}</option>`).join('');$('eSite').innerHTML=siteOpts;$('cSite').innerHTML='<option value="">ไม่ระบุ Site</option>'+siteOpts;const types=[...new Set(conv.map(x=>x.energy_type))];$('eType').innerHTML=types.map(x=>`<option>${x}</option>`).join('');syncEnergyUnits();$('cFactor').innerHTML=efs.map(x=>`<option value="${x.id}">Scope ${x.scope} • ${x.activity_name} (${x.unit})</option>`).join('');showFactorInfo();const now=new Date();$('eMonth').value=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;$('cDate').value=now.toISOString().slice(0,10)}
+function normUnit(u){u=(u||'').trim();if(/^liter(s)?$/i.test(u)||/^litre(s)?$/i.test(u))return'litre';if(u==='m³')return'm3';return u}
+function syncEnergyUnits(){const t=$('eType').value;const units=[...new Set(conv.filter(x=>x.energy_type===t).map(x=>x.source_unit))];$('eUnit').innerHTML=units.map(u=>`<option>${u}</option>`).join('')}
+function renderAll(){renderDashboard();renderEnergy();renderCarbon();renderFactors()}
+function renderDashboard(){const mj=energy.reduce((a,x)=>a+Number(x.energy_mj||0),0),cost=energy.reduce((a,x)=>a+Number(x.cost||x.electricity_cost||0),0);const s1=carbon.filter(x=>x.scope===1).reduce((a,x)=>a+Number(x.emission_tco2e||0),0),s2=carbon.filter(x=>x.scope===2).reduce((a,x)=>a+Number(x.emission_tco2e||0),0),s3=carbon.filter(x=>x.scope===3).reduce((a,x)=>a+Number(x.emission_tco2e||0),0);$('kEnergy').textContent=fmt(mj/1000,2);$('kCost').textContent=fmt(cost,0);$('kS1').textContent=fmt(s1,3);$('kS2').textContent=fmt(s2,3);$('kS3').textContent=fmt(s3,3);$('kCarbon').textContent=fmt(s1+s2+s3,3);$('cS1').textContent=fmt(s1,3)+' tCO₂e';$('cS2').textContent=fmt(s2,3)+' tCO₂e';$('cS3').textContent=fmt(s3,3)+' tCO₂e';const tot=s1+s2+s3||1;$('scopeSummary').innerHTML=`<div class="metricline"><span>Scope 1</span><b>${fmt(s1,3)} tCO₂e (${fmt(s1/tot*100,1)}%)</b></div><div class="metricline"><span>Scope 2</span><b>${fmt(s2,3)} tCO₂e (${fmt(s2/tot*100,1)}%)</b></div><div class="metricline"><span>Scope 3</span><b>${fmt(s3,3)} tCO₂e (${fmt(s3/tot*100,1)}%)</b></div>`;const by={};energy.forEach(x=>by[x.energy_type]=(by[x.energy_type]||0)+Number(x.energy_mj||0));$('energySummary').innerHTML=Object.entries(by).length?Object.entries(by).sort((a,b)=>b[1]-a[1]).map(([k,v])=>`<div class="metricline"><span>${k}</span><b>${fmt(v/1000,2)} GJ</b></div>`).join(''):'<div class="empty">ยังไม่มีข้อมูลพลังงาน</div>'}
+function carbonForEnergy(id){return carbon.find(x=>x.energy_record_id===id)}
+function renderEnergy(){$('energyRows').innerHTML=energy.length?energy.map(x=>{const c=carbonForEnergy(x.id);return`<tr><td>${x.record_date}</td><td>${x.energy_type}</td><td>${fmt(x.quantity,3)}</td><td>${x.unit}</td><td>${fmt(x.energy_mj,2)}</td><td>${fmt(x.cost||x.electricity_cost,0)}</td><td>${c?`<span class="pill s${c.scope}">S${c.scope}</span> ${fmt(c.emission_tco2e,4)} t`:'<span class="pill">ไม่มี EF</span>'}</td><td><button class="btn danger sm" onclick="deleteEnergy('${x.id}')">ลบ</button></td></tr>`}).join(''):'<tr><td colspan="8" class="empty">ยังไม่มีข้อมูล</td></tr>'}
+async function addEnergy(){const type=$('eType').value,unit=$('eUnit').value,qty=Number($('eQty').value),month=$('eMonth').value,site=$('eSite').value,cost=Number($('eCost').value||0);if(!month||!site||!qty||qty<0){message('energyMsg','กรอก Site, เดือน และปริมาณให้ถูกต้อง','bad');return}const f=conv.find(x=>x.energy_type===type&&normUnit(x.source_unit)===normUnit(unit));if(!f){message('energyMsg','ไม่พบ Conversion Factor สำหรับรายการนี้','bad');return}const record_date=month+'-01',energy_mj=qty*Number(f.conversion_factor);const payload={organization_id:profile.organization_id,site_id:site,record_date,year:Number(month.slice(0,4)),month:Number(month.slice(5,7)),period_type:'monthly',input_channel:'manual',energy_type:type,source_name:$('eSource').value.trim()||null,quantity:qty,unit:unit,cost:cost||null,note:$('eNote').value.trim()||null,kwh:type==='Electricity'&&normUnit(unit).toLowerCase()==='kwh'?qty:null,electricity_cost:type==='Electricity'?cost||null:null,energy_mj,conversion_factor_id:f.id,conversion_factor_value:f.conversion_factor,conversion_factor_version:f.version,calc_status:'calculated',created_by:session.user.id};const {error}=await db.from('energy_records').insert(payload);if(error){message('energyMsg',error.message,'bad');return}message('energyMsg','บันทึกสำเร็จ และระบบคำนวณ Carbon อัตโนมัติเมื่อพบ Emission Factor ที่ตรงกัน','ok');$('eQty').value='';$('eCost').value='';await loadAll()}
+async function deleteEnergy(id){if(!confirm('ลบ Energy Record นี้? Carbon ที่เชื่อมโยงจะถูกลบอัตโนมัติด้วย'))return;const {error}=await db.from('energy_records').delete().eq('id',id);if(error)alert(error.message);else await loadAll()}
+function scopePill(s){return `<span class="pill s${s}">Scope ${s}</span>`}
+function renderCarbon(){$('carbonRows').innerHTML=carbon.length?carbon.map(x=>`<tr><td>${x.record_date}</td><td>${scopePill(x.scope)}</td><td>${x.activity_name}</td><td>${fmt(x.activity_value,3)} ${x.activity_unit}</td><td>${fmt(x.emission_factor_value,6)}</td><td>${fmt(x.emission_kgco2e,3)}</td><td>${fmt(x.emission_tco2e,5)}</td><td>${x.source_reference||'-'}<br><span class="note">${x.emission_factor_version}</span></td></tr>`).join(''):'<tr><td colspan="8" class="empty">ยังไม่มี Carbon Record</td></tr>'}
+function currentEF(){return efs.find(x=>x.id===$('cFactor').value)}
+function showFactorInfo(){const f=currentEF();if(!f)return;$('factorInfo').innerHTML=`<b>${scopePill(f.scope)} ${f.activity_name}</b><br><br>Category: ${f.category}<br>Unit: ${f.unit}<br>EF: <b>${f.factor_value} ${f.factor_unit}</b><br>Version: ${f.version}<br>Year: ${f.published_year||'-'}<br>Source: ${f.source_reference||'-'}`;$('cQty').oninput=previewCarbon;previewCarbon()}
+function previewCarbon(){const f=currentEF(),q=Number($('cQty').value||0);$('cPreview').value=f?fmt(q*Number(f.factor_value)/1000,6)+' tCO₂e':''}
+async function addCarbonActivity(){const f=currentEF(),q=Number($('cQty').value),date=$('cDate').value;if(!f||!q||q<0||!date){message('carbonMsg','เลือก Factor และกรอก Activity Data ให้ถูกต้อง','bad');return}const kg=q*Number(f.factor_value);const payload={organization_id:profile.organization_id,site_id:$('cSite').value||null,record_date:date,scope:f.scope,category:f.category,activity_name:f.activity_name,activity_value:q,activity_unit:f.unit,emission_factor_id:f.id,emission_factor_value:f.factor_value,emission_factor_version:f.version,emission_kgco2e:kg,emission_tco2e:kg/1000,source_reference:f.source_reference,created_by:session.user.id};const {error}=await db.from('carbon_records').insert(payload);if(error){message('carbonMsg',error.message,'bad');return}message('carbonMsg','บันทึก Carbon Activity สำเร็จ','ok');$('cQty').value='';await loadAll()}
+function renderFactors(){$('convRows').innerHTML=conv.map(x=>`<tr><td>${x.energy_type}</td><td>${x.source_unit}</td><td>${x.conversion_factor}</td><td>${x.version}</td></tr>`).join('');$('efRows').innerHTML=efs.map(x=>`<tr><td>${x.scope}</td><td>${x.activity_name}<br><span class="note">${x.source_reference||''}</span></td><td>${x.factor_value} ${x.factor_unit}</td><td>${x.version}</td></tr>`).join('')}
+function calcEnpi(){const e=Number($('enEnergy').value),p=Number($('enProd').value);$('enpiResult').textContent=p>0?`EnPI = ${fmt(e/p,4)} kWh/unit`:'Production ต้องมากกว่า 0'}
+function csvDownload(name,rows){if(!rows.length){alert('ยังไม่มีข้อมูล');return}const keys=Object.keys(rows[0]),esc=v=>'"'+String(v??'').replaceAll('"','""')+'"',csv='\ufeff'+[keys.join(','),...rows.map(r=>keys.map(k=>esc(r[k])).join(','))].join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function exportEnergyCSV(){csvDownload('energy_records.csv',energy)}function exportCarbonCSV(){csvDownload('carbon_records.csv',carbon)}
+$('menu')?.addEventListener('click',e=>{const b=e.target.closest('button[data-page]');if(!b)return;document.querySelectorAll('.menu button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));$(b.dataset.page).classList.add('active');$('pageTitle').textContent=titles[b.dataset.page]||b.dataset.page});
+db.auth.onAuthStateChange((event)=>{if(event==='SIGNED_OUT')location.reload()});
 boot();
 </script>
 </body>
