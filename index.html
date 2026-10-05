@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Energy & Carbon Management</title>
+  <style>
+    :root{
+      --bg:#f4f7fb;--panel:#ffffff;--ink:#172033;--muted:#65748b;--line:#dfe6ef;
+      --primary:#0f766e;--primary2:#14b8a6;--warn:#d97706;--danger:#dc2626;--ok:#15803d;
+      --nav:#0b1f33;--shadow:0 8px 28px rgba(20,35,60,.08);
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+    .side{background:var(--nav);color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh;overflow:auto}
+    .brand{font-size:21px;font-weight:700;line-height:1.3;margin:0 8px 18px}.brand small{display:block;color:#8fdad3;font-size:12px;margin-top:6px}
+    .menu button{width:100%;text-align:left;border:0;background:transparent;color:#d9e5ef;padding:11px 12px;border-radius:9px;cursor:pointer;margin:2px 0;font-size:14px}
+    .menu button:hover,.menu button.active{background:#143550;color:#fff}.main{padding:24px}.top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}
+    h1{font-size:26px;margin:0 0 4px}.sub{color:var(--muted);font-size:13px}.badge{background:#e7f8f5;color:#0f766e;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:700}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+    .kpi{grid-column:span 2;min-height:110px}.kpi .label{font-size:12px;color:var(--muted)}.kpi .value{font-size:26px;font-weight:800;margin-top:11px}.kpi .unit{font-size:12px;color:var(--muted)}
+    .span4{grid-column:span 4}.span6{grid-column:span 6}.span8{grid-column:span 8}.span12{grid-column:span 12}
+    .title{font-size:16px;font-weight:700;margin-bottom:12px}.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+    input,select,textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;background:#fff;font:inherit}textarea{min-height:90px;resize:vertical}
+    .btn{border:0;border-radius:9px;padding:10px 14px;background:var(--primary);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.btn.warn{background:var(--warn)}
+    table{width:100%;border-collapse:collapse;font-size:13px}th,td{border-bottom:1px solid var(--line);padding:10px 8px;text-align:left}th{color:var(--muted);font-weight:700;background:#f8fafc}
+    .progress{height:10px;background:#edf2f7;border-radius:999px;overflow:hidden}.progress>div{height:100%;background:var(--primary2)}
+    .insight{border-left:4px solid var(--primary2);padding:12px 14px;background:#f0fdfa;border-radius:8px;margin:8px 0}.warnbox{border-left-color:#f59e0b;background:#fffbeb}.dangerbox{border-left-color:#ef4444;background:#fef2f2}
+    .pill{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}.pill.ok{background:#dcfce7;color:#166534}.pill.warn{background:#fef3c7;color:#92400e}.pill.info{background:#dbeafe;color:#1d4ed8}
+    .barwrap{height:190px;display:flex;align-items:flex-end;gap:12px;border-bottom:1px solid var(--line);padding:0 6px}.bar{flex:1;background:linear-gradient(180deg,#14b8a6,#0f766e);border-radius:7px 7px 0 0;min-width:22px;position:relative}.bar span{position:absolute;bottom:-22px;width:100%;text-align:center;font-size:11px;color:var(--muted)}
+    .hidden{display:none!important}.section{display:none}.section.active{display:block}.note{font-size:12px;color:var(--muted);line-height:1.6}.formula{font-family:Consolas,monospace;background:#0f172a;color:#e2e8f0;padding:12px;border-radius:8px}
+    @media(max-width:1000px){.app{grid-template-columns:1fr}.side{height:auto;position:relative}.kpi{grid-column:span 4}.span4,.span6,.span8{grid-column:span 12}.row{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){.main{padding:14px}.kpi{grid-column:span 6}.row{grid-template-columns:1fr}.top{flex-direction:column}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="side">
+    <div class="brand">AI Energy & Carbon<small>Management System for Organization</small></div>
+    <div class="menu" id="menu">
+      <button class="active" data-page="dashboard">Dashboard</button>
+      <button data-page="energy">Energy Data</button>
+      <button data-page="carbon">Carbon Scope 1–3</button>
+      <button data-page="enpi">EnPI & SEU</button>
+      <button data-page="projects">Energy Projects</button>
+      <button data-page="ai">AI Energy Manager</button>
+      <button data-page="dede">พพ. 8 ขั้นตอน</button>
+      <button data-page="reports">Reports</button>
+      <button data-page="settings">Settings / Factors</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><h1 id="pageTitle">Executive Dashboard</h1><div class="sub">ระบบบริหารจัดการพลังงาน คาร์บอน และ AI สำหรับองค์กร</div></div>
+      <div class="badge">MVP • Demo Data</div>
+    </div>
+
+    <section id="dashboard" class="section active">
+      <div class="grid">
+        <div class="card kpi"><div class="label">Total Energy</div><div class="value" id="kEnergy">5.21</div><div class="unit">ล้าน MJ</div></div>
+        <div class="card kpi"><div class="label">Energy Cost</div><div class="value" id="kCost">4.36</div><div class="unit">ล้านบาท</div></div>
+        <div class="card kpi"><div class="label">EnPI</div><div class="value" id="kEnpi">2.73</div><div class="unit">kWh/unit</div></div>
+        <div class="card kpi"><div class="label">Total Carbon</div><div class="value" id="kCarbon">412</div><div class="unit">tCO₂e</div></div>
+        <div class="card kpi"><div class="label">Energy Saving</div><div class="value">8.4%</div><div class="unit">เทียบ Baseline</div></div>
+        <div class="card kpi"><div class="label">Compliance</div><div class="value">87%</div><div class="unit">พพ. 8 ขั้นตอน</div></div>
+
+        <div class="card span6"><div class="title">Energy Trend</div><div class="barwrap">
+          <div class="bar" style="height:58%"><span>Jan</span></div><div class="bar" style="height:66%"><span>Feb</span></div><div class="bar" style="height:61%"><span>Mar</span></div><div class="bar" style="height:74%"><span>Apr</span></div><div class="bar" style="height:69%"><span>May</span></div><div class="bar" style="height:78%"><span>Jun</span></div><div class="bar" style="height:71%"><span>Jul</span></div><div class="bar" style="height:84%"><span>Aug</span></div><div class="bar" style="height:88%"><span>Sep</span></div>
+        </div></div>
+
+        <div class="card span6"><div class="title">Carbon by Scope</div>
+          <table><tr><th>Scope</th><th>tCO₂e</th><th>%</th><th>Status</th></tr><tr><td>Scope 1</td><td>115</td><td>27.9%</td><td><span class="pill ok">Controlled</span></td></tr><tr><td>Scope 2</td><td>235</td><td>57.0%</td><td><span class="pill warn">Focus</span></td></tr><tr><td>Scope 3</td><td>62</td><td>15.1%</td><td><span class="pill info">Monitor</span></td></tr></table>
+        </div>
+
+        <div class="card span8"><div class="title">AI Insight</div>
+          <div class="insight warnbox"><b>ตรวจพบ 3 ประเด็น</b><br>Compressor Line 2 สูงกว่าค่าเฉลี่ย 16% • Night Load สูง 11% • EnPI เดือนล่าสุดแย่ลง 4.3%</div>
+          <div class="insight"><b>คำแนะนำ</b><br>ตรวจ Air Leakage, ลด Pressure 0.5 bar และทบทวน Chiller Schedule</div>
+          <div class="note">Estimated opportunity: 87,000 kWh/year • 365,400 บาท/year • 41 tCO₂e/year</div>
+        </div>
+        <div class="card span4"><div class="title">Target Progress</div><div class="progress"><div style="width:84%"></div></div><p><b>84%</b> ของเป้าหมายการลดพลังงาน</p><div class="note">Baseline: 5.80 ล้าน MJ<br>Target: 5.22 ล้าน MJ<br>Actual: 5.21 ล้าน MJ</div></div>
+      </div>
+    </section>
+
+    <section id="energy" class="section">
+      <div class="grid"><div class="card span12"><div class="title">บันทึกข้อมูลพลังงาน</div>
+        <div class="row"><div class="field"><label>เดือน</label><input type="month" id="eMonth"></div><div class="field"><label>ประเภทพลังงาน</label><select id="eType"><option>Electricity</option><option>Diesel</option><option>Gasoline</option><option>LPG</option><option>Natural Gas</option><option>Solar</option></select></div><div class="field"><label>ปริมาณ</label><input type="number" id="eQty" placeholder="เช่น 120000"></div><div class="field"><label>หน่วย</label><select id="eUnit"><option>kWh</option><option>Liter</option><option>kg</option><option>m³</option></select></div></div>
+        <br><div class="row"><div class="field"><label>ค่าใช้จ่าย (บาท)</label><input type="number" id="eCost" placeholder="0"></div><div class="field"><label>Production Qty</label><input type="number" id="eProd" placeholder="0"></div><div class="field"><label>หมายเหตุ</label><input id="eNote" placeholder="Optional"></div><div class="field" style="align-self:end"><button class="btn" onclick="addEnergy()">+ เพิ่มข้อมูล</button></div></div>
+      </div><div class="card span12"><div class="title">รายการข้อมูล</div><table id="energyTable"><thead><tr><th>เดือน</th><th>ประเภท</th><th>ปริมาณ</th><th>หน่วย</th><th>MJ</th><th>ค่าใช้จ่าย</th><th>Production</th></tr></thead><tbody></tbody></table></div></div>
+    </section>
+
+    <section id="carbon" class="section">
+      <div class="grid"><div class="card span6"><div class="title">Carbon Calculator</div>
+        <div class="field"><label>Scope</label><select id="cScope"><option>Scope 1</option><option>Scope 2</option><option>Scope 3</option></select></div><br>
+        <div class="field"><label>Activity Data</label><input type="number" id="cActivity" value="10000"></div><br>
+        <div class="field"><label>Emission Factor (kgCO₂e/unit)</label><input type="number" step="0.0001" id="cEF" value="0.4999"></div><br>
+        <button class="btn" onclick="calcCarbon()">คำนวณ CO₂e</button>
+        <div class="insight" id="cResult">ผลลัพธ์จะปรากฏที่นี่</div>
+      </div><div class="card span6"><div class="title">หลักการคำนวณ</div><div class="formula">CO₂e = Activity Data × Emission Factor</div><p class="note">ค่า Emission Factor ในระบบจริงควรมาจากฐานข้อมูล Master และเก็บ Source, Year, Version ทุกครั้ง ห้ามให้ AI เปลี่ยนค่า EF เอง</p></div></div>
+    </section>
+
+    <section id="enpi" class="section">
+      <div class="grid"><div class="card span6"><div class="title">EnPI Calculator</div><div class="field"><label>Energy (kWh)</label><input type="number" id="enEnergy" value="120000"></div><br><div class="field"><label>Production</label><input type="number" id="enProd" value="40000"></div><br><button class="btn" onclick="calcEnpi()">คำนวณ EnPI</button><div class="insight" id="enResult">EnPI = 3.00 kWh/unit</div></div>
+      <div class="card span6"><div class="title">SEU Ranking</div><table><tr><th>Equipment</th><th>Energy %</th><th>Status</th></tr><tr><td>Compressor</td><td>31%</td><td><span class="pill warn">SEU</span></td></tr><tr><td>Chiller</td><td>24%</td><td><span class="pill warn">SEU</span></td></tr><tr><td>Production</td><td>19%</td><td><span class="pill warn">SEU</span></td></tr><tr><td>Lighting</td><td>8%</td><td><span class="pill ok">Normal</span></td></tr></table></div></div>
+    </section>
+
+    <section id="projects" class="section">
+      <div class="grid"><div class="card span12"><div class="title">Energy Conservation Projects</div><table><tr><th>Project</th><th>Investment</th><th>Saving/yr</th><th>Payback</th><th>CO₂ Reduction</th><th>AI Priority</th></tr><tr><td>Compressor VSD</td><td>500,000</td><td>252,000</td><td>1.98 ปี</td><td>25 t</td><td><span class="pill ok">Very High</span></td></tr><tr><td>LED</td><td>120,000</td><td>90,000</td><td>1.33 ปี</td><td>8 t</td><td><span class="pill ok">High</span></td></tr><tr><td>Solar 100 kW</td><td>2,500,000</td><td>480,000</td><td>5.2 ปี</td><td>80 t</td><td><span class="pill warn">Medium</span></td></tr></table></div></div>
+    </section>
+
+    <section id="ai" class="section">
+      <div class="grid"><div class="card span8"><div class="title">AI Energy Manager</div><div class="field"><label>ถาม AI จากข้อมูลพลังงาน/คาร์บอน</label><textarea id="aiQ" placeholder="เช่น ทำไม EnPI เดือนนี้สูงขึ้น"></textarea></div><br><button class="btn" onclick="askAI()">วิเคราะห์</button><div id="aiAnswer" class="insight">เวอร์ชันนี้เป็น Rule-based Demo ก่อนเชื่อม AI API จริง</div></div>
+      <div class="card span4"><div class="title">AI Guardrails</div><p class="note">AI ทำหน้าที่วิเคราะห์ อธิบาย พยากรณ์ และแนะนำเท่านั้น<br><br>• ห้ามเปลี่ยนสูตรคำนวณ<br>• ห้ามเปลี่ยน EF/Conversion Factor<br>• ห้ามอนุมัติ Compliance แทนมนุษย์<br>• ต้องแจ้งเมื่อข้อมูลไม่เพียงพอ</p></div></div>
+    </section>
+
+    <section id="dede" class="section">
+      <div class="grid"><div class="card span12"><div class="title">การจัดการพลังงานตามแนว พพ. — 8 ขั้นตอน</div>
+        <table><tr><th>#</th><th>ขั้นตอน</th><th>Status</th><th>Progress</th></tr>
+        <tr><td>1</td><td>สถานภาพการจัดการพลังงานเบื้องต้น</td><td><span class="pill ok">Completed</span></td><td>100%</td></tr>
+        <tr><td>2</td><td>นโยบายอนุรักษ์พลังงาน</td><td><span class="pill ok">Completed</span></td><td>100%</td></tr>
+        <tr><td>3</td><td>คณะทำงานด้านการจัดการพลังงาน</td><td><span class="pill warn">Need Evidence</span></td><td>75%</td></tr>
+        <tr><td>4</td><td>การประเมินศักยภาพการอนุรักษ์พลังงาน</td><td><span class="pill ok">Completed</span></td><td>100%</td></tr>
+        <tr><td>5</td><td>เป้าหมายและแผนอนุรักษ์พลังงาน</td><td><span class="pill info">In Progress</span></td><td>85%</td></tr>
+        <tr><td>6</td><td>การดำเนินการตามแผน</td><td><span class="pill info">In Progress</span></td><td>80%</td></tr>
+        <tr><td>7</td><td>การตรวจติดตามและประเมินผล</td><td><span class="pill info">In Progress</span></td><td>75%</td></tr>
+        <tr><td>8</td><td>การทบทวน วิเคราะห์ และแก้ไขข้อบกพร่อง</td><td><span class="pill warn">Pending</span></td><td>60%</td></tr></table>
+        <div class="insight warnbox"><b>AI Compliance Checker:</b> ขั้นตอนที่ 3 ยังขาดเอกสารแต่งตั้งคณะทำงาน และขั้นตอนที่ 5 ควรระบุผู้รับผิดชอบทุกมาตรการ</div>
+      </div></div>
+    </section>
+
+    <section id="reports" class="section">
+      <div class="grid"><div class="card span12"><div class="title">Reports & Export</div><p>รายงานที่รองรับในแผนพัฒนา</p><table><tr><th>Report</th><th>Status</th></tr><tr><td>Monthly Energy Report</td><td><span class="pill ok">MVP</span></td></tr><tr><td>Annual Energy Report</td><td><span class="pill info">Planned</span></td></tr><tr><td>Carbon Footprint Report</td><td><span class="pill info">Planned</span></td></tr><tr><td>DEDE Compliance Report</td><td><span class="pill info">Planned</span></td></tr><tr><td>AI Executive Summary</td><td><span class="pill info">Planned</span></td></tr></table><br><button class="btn secondary" onclick="window.print()">Print / Save PDF</button></div></div>
+    </section>
+
+    <section id="settings" class="section">
+      <div class="grid"><div class="card span6"><div class="title">Conversion Factors</div><table><tr><th>Energy</th><th>From</th><th>To MJ</th></tr><tr><td>Electricity</td><td>1 kWh</td><td>3.6</td></tr><tr><td>Diesel</td><td>1 Liter</td><td>36.0 (Demo)</td></tr><tr><td>LPG</td><td>1 kg</td><td>46.1 (Demo)</td></tr></table><p class="note">ค่าที่เป็น Demo ต้องเปลี่ยนเป็น Master Factor ที่องค์กรรับรองก่อนใช้จริง</p></div><div class="card span6"><div class="title">Emission Factors</div><table><tr><th>Activity</th><th>EF</th><th>Version</th></tr><tr><td>Electricity</td><td>0.4999 (Demo)</td><td>Demo</td></tr><tr><td>Diesel</td><td>2.68 (Demo)</td><td>Demo</td></tr></table><p class="note">ระบบจริงต้องเก็บ Source Reference, Published Year, Valid From/To และ Version</p></div></div>
+    </section>
+  </main>
+</div>
+
+<script>
+const titles={dashboard:'Executive Dashboard',energy:'Energy Data Management',carbon:'Carbon Footprint',enpi:'EnPI & Significant Energy Use',projects:'Energy Conservation Projects',ai:'AI Energy Manager',dede:'DEDE Energy Management Compliance',reports:'Reports & Export',settings:'Settings / Master Factors'};
+document.querySelectorAll('#menu button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#menu button').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));document.getElementById(b.dataset.page).classList.add('active');document.getElementById('pageTitle').textContent=titles[b.dataset.page]}));
+
+const energyRows=[];
+function factorToMJ(type,unit){if(type==='Electricity'&&unit==='kWh')return 3.6;if(type==='Diesel'&&unit==='Liter')return 36;if(type==='Gasoline'&&unit==='Liter')return 34.2;if(type==='LPG'&&unit==='kg')return 46.1;if(type==='Natural Gas'&&unit==='m³')return 38;return 1}
+function addEnergy(){const month=document.getElementById('eMonth').value||'-',type=eType.value,qty=Number(eQty.value||0),unit=eUnit.value,cost=Number(eCost.value||0),prod=Number(eProd.value||0);if(qty<=0){alert('กรุณากรอกปริมาณพลังงาน');return}const mj=qty*factorToMJ(type,unit);energyRows.push({month,type,qty,unit,mj,cost,prod});renderEnergy()}
+function renderEnergy(){const tb=document.querySelector('#energyTable tbody');tb.innerHTML=energyRows.map(r=>`<tr><td>${r.month}</td><td>${r.type}</td><td>${r.qty.toLocaleString()}</td><td>${r.unit}</td><td>${r.mj.toLocaleString(undefined,{maximumFractionDigits:2})}</td><td>${r.cost.toLocaleString()}</td><td>${r.prod.toLocaleString()}</td></tr>`).join('')}
+function calcCarbon(){const a=Number(cActivity.value||0),ef=Number(cEF.value||0),kg=a*ef,t=kg/1000;cResult.innerHTML=`<b>${cScope.value}</b><br>${kg.toLocaleString(undefined,{maximumFractionDigits:2})} kgCO₂e<br><b>${t.toLocaleString(undefined,{maximumFractionDigits:4})} tCO₂e</b>`}
+function calcEnpi(){const e=Number(enEnergy.value||0),p=Number(enProd.value||0);enResult.innerHTML=p>0?`<b>EnPI = ${(e/p).toFixed(3)} kWh/unit</b>`:'Production ต้องมากกว่า 0'}
+function askAI(){const q=aiQ.value.trim();if(!q){aiAnswer.textContent='กรุณาพิมพ์คำถาม';return}let ans='จากข้อมูล Demo ปัจจุบัน: Scope 2 เป็นแหล่งปล่อยหลัก 57% และ Compressor เป็น SEU สูงสุด 31% จึงควรตรวจสอบโหลด Compressor ก่อน';if(q.includes('EnPI'))ans='EnPI สูงขึ้นได้เมื่อพลังงานลดลงช้ากว่าปริมาณการผลิต หรือมี Base Load สูงขึ้น ควรเทียบ Production, Operating Hours และ Night Load ของช่วงเดียวกัน';if(q.includes('ลงทุน')||q.includes('โครงการ'))ans='ตามข้อมูล Demo ควรพิจารณา Compressor VSD ก่อน เนื่องจาก Payback 1.98 ปี และมีศักยภาพลด CO₂ สูงกว่าโครงการ LED';if(q.includes('Scope 2'))ans='Scope 2 มาจากพลังงานที่ซื้อ โดยเฉพาะไฟฟ้า ในข้อมูล Demo คิดเป็น 235 tCO₂e หรือ 57% ของ Total Carbon';aiAnswer.innerHTML=`<b>AI Analysis (Demo)</b><br>${ans}<br><br><span class="note">หมายเหตุ: เวอร์ชันนี้ยังไม่ได้เชื่อม AI API และ Database จริง</span>`}
+</script>
+</body>
+</html>
