@@ -6,11 +6,12 @@
   <title>Admin • AI Energy & Carbon Management</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    :root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#667085;--line:#dfe6ef;--nav:#0b1f33;--pri:#0f766e;--danger:#b42318;--shadow:0 8px 28px rgba(20,35,60,.08)}
+    :root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#667085;--line:#dfe6ef;--nav:#0b1f33;--pri:#0f766e;--pri2:#14b8a6;--danger:#b42318;--warn:#b54708;--shadow:0 8px 28px rgba(20,35,60,.08)}
     *{box-sizing:border-box}body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}
-    .layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:var(--nav);color:white;padding:22px 16px}.brand{font-size:20px;font-weight:700;margin:0 8px 20px}.brand small{display:block;color:#95d9d3;font-size:12px;margin-top:6px}.side a,.side button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:9px;border:0;background:transparent;color:#d9e5ef;text-decoration:none;cursor:pointer;font:inherit}.side a:hover,.side button:hover{background:#143550;color:#fff}
-    .main{padding:24px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top h1{margin:0}.badge{background:#e7f8f5;color:#0f766e;padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.kpi{grid-column:span 3}.span12{grid-column:span 12}.span6{grid-column:span 6}.value{font-size:28px;font-weight:800;margin-top:8px}.label{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}th{background:#f8fafc;color:var(--muted)}select,input{padding:8px;border:1px solid var(--line);border-radius:8px;background:white}.btn{border:0;background:var(--pri);color:white;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.danger{color:var(--danger)}.notice{padding:12px 14px;border-radius:10px;background:#eef7ff;border:1px solid #cfe5ff;margin-bottom:16px}.hidden{display:none}.muted{color:var(--muted);font-size:12px}.login{max-width:440px;margin:10vh auto}.login .card{padding:24px}.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input{width:100%;padding:11px}
-    @media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:none}.kpi{grid-column:span 6}.span6{grid-column:span 12}}
+    .layout{display:grid;grid-template-columns:260px 1fr;min-height:100vh}.side{background:var(--nav);color:white;padding:22px 16px;position:sticky;top:0;height:100vh;overflow:auto}.brand{font-size:20px;font-weight:700;margin:0 8px 20px}.brand small{display:block;color:#95d9d3;font-size:12px;margin-top:6px}.side a,.side button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:9px;border:0;background:transparent;color:#d9e5ef;text-decoration:none;cursor:pointer;font:inherit}.side a:hover,.side button:hover,.side button.active{background:#143550;color:#fff}
+    .main{padding:24px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top h1{margin:0}.badge{background:#e7f8f5;color:#0f766e;padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.kpi{grid-column:span 3}.span12{grid-column:span 12}.span8{grid-column:span 8}.span6{grid-column:span 6}.span4{grid-column:span 4}.value{font-size:28px;font-weight:800;margin-top:8px}.label{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#f8fafc;color:var(--muted);position:sticky;top:0}select,input,textarea{padding:9px;border:1px solid var(--line);border-radius:8px;background:white;font:inherit;width:100%}textarea{min-height:82px}.btn{border:0;background:var(--pri);color:white;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.btn.dangerBtn{background:#b42318}.btn.small{padding:6px 9px;font-size:12px}.danger{color:var(--danger)}.notice{padding:12px 14px;border-radius:10px;background:#eef7ff;border:1px solid #cfe5ff;margin-bottom:16px}.hidden{display:none!important}.muted{color:var(--muted);font-size:12px}.login{max-width:440px;margin:10vh auto}.login .card{padding:24px}.field{margin:10px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.section{display:none}.section.active{display:block}.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}.status{display:inline-block;padding:4px 8px;border-radius:999px;font-size:11px;font-weight:700}.ok{background:#dcfce7;color:#166534}.off{background:#fee2e2;color:#991b1b}.warn{background:#fef3c7;color:#92400e}.scroll{overflow:auto;max-height:520px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}.tabs button{border:1px solid var(--line);background:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}.tabs button.active{background:var(--pri);color:#fff;border-color:var(--pri)}
+    @media(max-width:1000px){.layout{grid-template-columns:1fr}.side{height:auto;position:relative}.kpi{grid-column:span 6}.span4,.span6,.span8{grid-column:span 12}.row{grid-template-columns:1fr 1fr}}
+    @media(max-width:650px){.main{padding:14px}.kpi{grid-column:span 12}.row{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
   </style>
 </head>
 <body>
@@ -28,24 +29,56 @@
 <div id="adminView" class="layout hidden">
   <aside class="side">
     <div class="brand">Admin Backoffice<small>AI Energy & Carbon Management</small></div>
+    <button class="active" data-page="dashboard" onclick="showPage('dashboard',this)">Dashboard</button>
+    <button data-page="users" onclick="showPage('users',this)">Users & Roles</button>
+    <button data-page="organizations" onclick="showPage('organizations',this)">Organizations</button>
+    <button data-page="factors" onclick="showPage('factors',this)">Factors</button>
+    <button data-page="audit" onclick="showPage('audit',this)">Audit Log</button>
     <a href="./index.html">← กลับหน้าเว็บหลัก</a>
     <button onclick="loadAll()">Refresh Data</button>
     <button onclick="logout()">Logout</button>
   </aside>
   <main class="main">
-    <div class="top"><div><h1>Super Admin Dashboard</h1><div class="muted" id="who"></div></div><div class="badge">OWNER / SUPER ADMIN</div></div>
-    <div class="notice">หลังบ้านนี้ใช้สำหรับจัดการผู้ใช้ องค์กร และตรวจสถานะข้อมูลระบบทั้งหมด</div>
-    <div class="grid">
-      <div class="card kpi"><div class="label">Users</div><div class="value" id="nUsers">-</div></div>
-      <div class="card kpi"><div class="label">Organizations</div><div class="value" id="nOrgs">-</div></div>
-      <div class="card kpi"><div class="label">Energy Records</div><div class="value" id="nEnergy">-</div></div>
-      <div class="card kpi"><div class="label">Carbon Records</div><div class="value" id="nCarbon">-</div></div>
+    <div class="top"><div><h1 id="pageTitle">Super Admin Dashboard</h1><div class="muted" id="who"></div></div><div class="badge">OWNER / SUPER ADMIN</div></div>
+    <div class="notice">หลังบ้านสำหรับเจ้าของระบบ: จัดการผู้ใช้ องค์กร Conversion Factor, Emission Factor และตรวจสอบ Audit Log</div>
 
-      <div class="card span12"><h3>จัดการผู้ใช้</h3><div class="muted">Super Admin สามารถเปลี่ยน Role และเปิด/ปิดบัญชีได้</div><br><div style="overflow:auto"><table><thead><tr><th>ชื่อ</th><th>อีเมล</th><th>Role</th><th>องค์กร</th><th>สถานะ</th><th>Action</th></tr></thead><tbody id="usersBody"></tbody></table></div></div>
+    <section id="dashboard" class="section active">
+      <div class="grid">
+        <div class="card kpi"><div class="label">Users</div><div class="value" id="nUsers">-</div></div>
+        <div class="card kpi"><div class="label">Organizations</div><div class="value" id="nOrgs">-</div></div>
+        <div class="card kpi"><div class="label">Energy Records</div><div class="value" id="nEnergy">-</div></div>
+        <div class="card kpi"><div class="label">Carbon Records</div><div class="value" id="nCarbon">-</div></div>
+        <div class="card span6"><h3>System Status</h3><table><tbody><tr><td>Conversion Factors</td><td id="nConv">-</td></tr><tr><td>Emission Factors</td><td id="nEF">-</td></tr><tr><td>Sites</td><td id="nSites">-</td></tr><tr><td>Departments</td><td id="nDept">-</td></tr></tbody></table></div>
+        <div class="card span6"><h3>Quick Actions</h3><div class="toolbar"><button class="btn" onclick="showPage('users')">Manage Users</button><button class="btn" onclick="showPage('organizations')">Manage Organizations</button><button class="btn" onclick="showPage('factors')">Manage Factors</button><button class="btn secondary" onclick="showPage('audit')">View Audit Log</button></div></div>
+      </div>
+    </section>
 
-      <div class="card span6"><h3>Organizations</h3><div style="overflow:auto"><table><thead><tr><th>Code</th><th>Name</th><th>Type</th></tr></thead><tbody id="orgBody"></tbody></table></div></div>
-      <div class="card span6"><h3>System Status</h3><table><tbody><tr><td>Conversion Factors</td><td id="nConv">-</td></tr><tr><td>Emission Factors</td><td id="nEF">-</td></tr><tr><td>Sites</td><td id="nSites">-</td></tr><tr><td>Departments</td><td id="nDept">-</td></tr></tbody></table></div>
-    </div>
+    <section id="users" class="section">
+      <div class="card"><h3>จัดการผู้ใช้</h3><div class="muted">เปลี่ยน Role และเปิด/ปิดบัญชีผู้ใช้</div><br><div class="scroll"><table><thead><tr><th>ชื่อ</th><th>อีเมล</th><th>Role</th><th>องค์กร</th><th>สถานะ</th><th>Action</th></tr></thead><tbody id="usersBody"></tbody></table></div></div>
+    </section>
+
+    <section id="organizations" class="section">
+      <div class="grid">
+        <div class="card span12"><h3 id="orgFormTitle">เพิ่มองค์กร</h3><input type="hidden" id="orgId"><div class="row"><div class="field"><label>Organization Code</label><input id="orgCode"></div><div class="field"><label>Organization Name</label><input id="orgName"></div><div class="field"><label>Business Type</label><input id="orgBusiness"></div><div class="field"><label>Organization Type</label><select id="orgType"><option>Factory</option><option>Building</option><option>University</option><option>Warehouse</option><option>Logistics</option><option>SME</option><option>Other</option></select></div></div><div class="row"><div class="field"><label>Province</label><input id="orgProvince"></div><div class="field"><label>Contact Name</label><input id="orgContact"></div><div class="field"><label>Contact Email</label><input id="orgEmail"></div><div class="field"><label>Controlled Status</label><select id="orgControlled"><option>General Organization</option><option>Controlled Factory</option><option>Controlled Building</option></select></div></div><div class="toolbar"><button class="btn" onclick="saveOrganization()">Save Organization</button><button class="btn secondary" onclick="resetOrgForm()">Clear</button></div></div>
+        <div class="card span12"><h3>Organizations</h3><div class="scroll"><table><thead><tr><th>Code</th><th>Name</th><th>Business</th><th>Type</th><th>Province</th><th>Controlled</th><th>Action</th></tr></thead><tbody id="orgBody"></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section id="factors" class="section">
+      <div class="tabs"><button id="tabEF" class="active" onclick="factorTab('ef')">Emission Factors</button><button id="tabCF" onclick="factorTab('cf')">Conversion Factors</button></div>
+      <div id="efPanel">
+        <div class="card"><h3 id="efFormTitle">เพิ่ม Emission Factor</h3><input type="hidden" id="efId"><div class="row"><div class="field"><label>Activity Name</label><input id="efActivity"></div><div class="field"><label>Category</label><input id="efCategory"></div><div class="field"><label>Scope</label><select id="efScope"><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div><div class="field"><label>Unit</label><input id="efUnit"></div></div><div class="row"><div class="field"><label>Factor Value</label><input id="efValue" type="number" step="any"></div><div class="field"><label>Factor Unit</label><input id="efFactorUnit" placeholder="kgCO2e/kWh"></div><div class="field"><label>Published Year</label><input id="efYear" type="number"></div><div class="field"><label>Version</label><input id="efVersion"></div></div><div class="row"><div class="field"><label>Valid From</label><input id="efFrom" type="date"></div><div class="field"><label>Valid To</label><input id="efTo" type="date"></div><div class="field"><label>Source Reference</label><input id="efSource"></div><div class="field"><label>Active</label><select id="efActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div><div class="toolbar"><button class="btn" onclick="saveEF()">Save EF</button><button class="btn secondary" onclick="resetEFForm()">Clear</button></div></div><br>
+        <div class="card"><h3>Emission Factor Master</h3><div class="scroll"><table><thead><tr><th>Activity</th><th>Scope</th><th>Unit</th><th>Factor</th><th>Version</th><th>Source</th><th>Status</th><th>Action</th></tr></thead><tbody id="efBody"></tbody></table></div></div>
+      </div>
+      <div id="cfPanel" class="hidden">
+        <div class="card"><h3 id="cfFormTitle">เพิ่ม Conversion Factor</h3><input type="hidden" id="cfId"><div class="row"><div class="field"><label>Energy Type</label><input id="cfEnergy"></div><div class="field"><label>Source Unit</label><input id="cfSourceUnit"></div><div class="field"><label>Target Unit</label><input id="cfTargetUnit" value="MJ"></div><div class="field"><label>Conversion Factor</label><input id="cfValue" type="number" step="any"></div></div><div class="row"><div class="field"><label>Version</label><input id="cfVersion"></div><div class="field"><label>Valid From</label><input id="cfFrom" type="date"></div><div class="field"><label>Valid To</label><input id="cfTo" type="date"></div><div class="field"><label>Active</label><select id="cfActive"><option value="true">Active</option><option value="false">Inactive</option></select></div></div><div class="field"><label>Source Reference</label><input id="cfSource"></div><div class="toolbar"><button class="btn" onclick="saveCF()">Save Conversion Factor</button><button class="btn secondary" onclick="resetCFForm()">Clear</button></div></div><br>
+        <div class="card"><h3>Conversion Factor Master</h3><div class="scroll"><table><thead><tr><th>Energy</th><th>From</th><th>To</th><th>Factor</th><th>Version</th><th>Source</th><th>Status</th><th>Action</th></tr></thead><tbody id="cfBody"></tbody></table></div></div>
+      </div>
+    </section>
+
+    <section id="audit" class="section">
+      <div class="card"><div class="toolbar"><h3 style="margin-right:auto">Audit Log</h3><input id="auditSearch" placeholder="ค้นหา module/action/record" style="max-width:280px" oninput="renderAudit()"><button class="btn secondary" onclick="loadAudit()">Refresh</button></div><div class="scroll"><table><thead><tr><th>Date/Time</th><th>User</th><th>Module</th><th>Action</th><th>Record</th><th>Organization</th></tr></thead><tbody id="auditBody"></tbody></table></div></div>
+    </section>
   </main>
 </div>
 <script>
@@ -53,60 +86,37 @@ const SUPABASE_URL='https://fjkhhnuftrzpssodaeho.supabase.co';
 const SUPABASE_KEY='sb_publishable_05iZBWSteuTbG1z6W9tFrA_T99xb-jE';
 const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 const roles=['super_admin','org_admin','energy_manager','department_user','auditor','executive','viewer'];
-let currentProfile=null;
+let currentProfile=null, orgsCache=[], usersCache=[], efCache=[], cfCache=[], auditCache=[];
 
-async function login(){
-  const email=document.getElementById('email').value.trim();
-  const password=document.getElementById('password').value;
-  const m=document.getElementById('loginMsg');m.textContent='กำลังเข้าสู่ระบบ...';
-  const {error}=await sb.auth.signInWithPassword({email,password});
-  if(error){m.textContent=error.message;return}
-  await boot();
-}
+async function login(){const email=v('email').trim(),password=v('password');text('loginMsg','กำลังเข้าสู่ระบบ...');const {error}=await sb.auth.signInWithPassword({email,password});if(error){text('loginMsg',error.message);return}await boot()}
 async function logout(){await sb.auth.signOut();location.reload()}
-async function boot(){
-  const {data:{user}}=await sb.auth.getUser();
-  if(!user){document.getElementById('loginView').classList.remove('hidden');return}
-  const {data:p,error}=await sb.from('profiles').select('id,full_name,email,role,organization_id,active_status').eq('id',user.id).single();
-  if(error||!p){document.getElementById('loginMsg').textContent='ไม่พบ Profile';return}
-  currentProfile=p;
-  if(p.role!=='super_admin'){
-    document.getElementById('loginMsg').innerHTML='<span class="danger">บัญชีนี้ไม่มีสิทธิ์ Super Admin (Role: '+escapeHtml(p.role)+')</span>';
-    document.getElementById('loginView').classList.remove('hidden');
-    return;
-  }
-  document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');
-  document.getElementById('who').textContent=(p.full_name||p.email||'Super Admin')+' • '+p.role;
-  await loadAll();
-}
-async function countTable(table,id){const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});document.getElementById(id).textContent=error?'ERR':(count??0)}
-async function loadAll(){
-  await Promise.all([countTable('profiles','nUsers'),countTable('organizations','nOrgs'),countTable('energy_records','nEnergy'),countTable('carbon_records','nCarbon'),countTable('conversion_factors','nConv'),countTable('emission_factors','nEF'),countTable('sites','nSites'),countTable('departments','nDept')]);
-  const [{data:users,error:uerr},{data:orgs,error:oerr}]=await Promise.all([
-    sb.from('profiles').select('id,full_name,email,role,organization_id,active_status,created_at').order('created_at',{ascending:true}),
-    sb.from('organizations').select('id,organization_code,organization_name,organization_type').order('organization_name')
-  ]);
-  const orgMap=Object.fromEntries((orgs||[]).map(o=>[o.id,o.organization_name]));
-  const ub=document.getElementById('usersBody');ub.innerHTML='';
-  (users||[]).forEach(u=>{
-    const tr=document.createElement('tr');
-    const opts=roles.map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${r}</option>`).join('');
-    tr.innerHTML=`<td>${escapeHtml(u.full_name||'-')}</td><td>${escapeHtml(u.email||'-')}</td><td><select id="role_${u.id}">${opts}</select></td><td>${escapeHtml(orgMap[u.organization_id]||'-')}</td><td><select id="active_${u.id}"><option value="true" ${u.active_status!==false?'selected':''}>Active</option><option value="false" ${u.active_status===false?'selected':''}>Disabled</option></select></td><td><button class="btn" onclick="saveUser('${u.id}')">Save</button></td>`;
-    ub.appendChild(tr);
-  });
-  const ob=document.getElementById('orgBody');ob.innerHTML='';
-  (orgs||[]).forEach(o=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(o.organization_code||'-')}</td><td>${escapeHtml(o.organization_name||'-')}</td><td>${escapeHtml(o.organization_type||'-')}</td>`;ob.appendChild(tr)});
-  if(uerr||oerr) alert('โหลดข้อมูลบางส่วนไม่สำเร็จ');
-}
-async function saveUser(id){
-  const role=document.getElementById('role_'+id).value;
-  const active_status=document.getElementById('active_'+id).value==='true';
-  if(id===currentProfile.id && role!=='super_admin'){if(!confirm('คุณกำลังลดสิทธิ์ Super Admin ของตัวเอง ยืนยันหรือไม่?'))return}
-  const {error}=await sb.from('profiles').update({role,active_status}).eq('id',id);
-  if(error){alert('บันทึกไม่สำเร็จ: '+error.message);return}
-  alert('บันทึกสิทธิ์เรียบร้อย');await loadAll();
-}
-function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+async function boot(){const {data:{user}}=await sb.auth.getUser();if(!user){show('loginView');return}const {data:p,error}=await sb.from('profiles').select('id,full_name,email,role,organization_id,active_status').eq('id',user.id).single();if(error||!p){text('loginMsg','ไม่พบ Profile');return}currentProfile=p;if(p.role!=='super_admin'){document.getElementById('loginMsg').innerHTML='<span class="danger">บัญชีนี้ไม่มีสิทธิ์ Super Admin (Role: '+esc(p.role)+')</span>';show('loginView');return}hide('loginView');show('adminView');text('who',(p.full_name||p.email||'Super Admin')+' • '+p.role);await loadAll()}
+function showPage(id,btn){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.side button[data-page]').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');else{const b=document.querySelector(`.side button[data-page="${id}"]`);if(b)b.classList.add('active')}const titles={dashboard:'Super Admin Dashboard',users:'Users & Roles',organizations:'Organizations',factors:'Factors Management',audit:'Audit Log'};text('pageTitle',titles[id]||'Admin')}
+async function countTable(table,id){const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});text(id,error?'ERR':(count??0))}
+async function loadAll(){await Promise.all([countTable('profiles','nUsers'),countTable('organizations','nOrgs'),countTable('energy_records','nEnergy'),countTable('carbon_records','nCarbon'),countTable('conversion_factors','nConv'),countTable('emission_factors','nEF'),countTable('sites','nSites'),countTable('departments','nDept')]);await Promise.all([loadUsersOrgs(),loadFactors(),loadAudit()])}
+async function loadUsersOrgs(){const [{data:users,error:uerr},{data:orgs,error:oerr}]=await Promise.all([sb.from('profiles').select('id,full_name,email,role,organization_id,active_status,created_at').order('created_at',{ascending:true}),sb.from('organizations').select('*').order('organization_name')]);if(uerr||oerr){alert('โหลดข้อมูลผู้ใช้/องค์กรไม่สำเร็จ');return}usersCache=users||[];orgsCache=orgs||[];renderUsers();renderOrgs()}
+function renderUsers(){const map=Object.fromEntries(orgsCache.map(o=>[o.id,o.organization_name]));const body=document.getElementById('usersBody');body.innerHTML='';usersCache.forEach(u=>{const tr=document.createElement('tr');const opts=roles.map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${r}</option>`).join('');tr.innerHTML=`<td>${esc(u.full_name||'-')}</td><td>${esc(u.email||'-')}</td><td><select id="role_${u.id}">${opts}</select></td><td>${esc(map[u.organization_id]||'-')}</td><td><select id="active_${u.id}"><option value="true" ${u.active_status!==false?'selected':''}>Active</option><option value="false" ${u.active_status===false?'selected':''}>Disabled</option></select></td><td><button class="btn small" onclick="saveUser('${u.id}')">Save</button></td>`;body.appendChild(tr)})}
+async function saveUser(id){const role=v('role_'+id),active_status=v('active_'+id)==='true';if(id===currentProfile.id&&role!=='super_admin'&&!confirm('คุณกำลังลดสิทธิ์ Super Admin ของตัวเอง ยืนยันหรือไม่?'))return;const {error}=await sb.from('profiles').update({role,active_status}).eq('id',id);if(error){alert('บันทึกไม่สำเร็จ: '+error.message);return}alert('บันทึกสิทธิ์เรียบร้อย');await loadUsersOrgs();await loadAudit()}
+function renderOrgs(){const body=document.getElementById('orgBody');body.innerHTML='';orgsCache.forEach(o=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(o.organization_code||'-')}</td><td>${esc(o.organization_name||'-')}</td><td>${esc(o.business_type||'-')}</td><td>${esc(o.organization_type||'-')}</td><td>${esc(o.province||'-')}</td><td>${esc(o.controlled_status||'-')}</td><td><button class="btn small" onclick="editOrg('${o.id}')">Edit</button> <button class="btn small dangerBtn" onclick="deleteOrg('${o.id}')">Delete</button></td>`;body.appendChild(tr)})}
+function editOrg(id){const o=orgsCache.find(x=>x.id===id);if(!o)return;setv('orgId',o.id);setv('orgCode',o.organization_code);setv('orgName',o.organization_name);setv('orgBusiness',o.business_type);setv('orgType',o.organization_type||'Other');setv('orgProvince',o.province);setv('orgContact',o.contact_name);setv('orgEmail',o.contact_email);setv('orgControlled',o.controlled_status||'General Organization');text('orgFormTitle','แก้ไของค์กร');window.scrollTo({top:0,behavior:'smooth'})}
+function resetOrgForm(){['orgId','orgCode','orgName','orgBusiness','orgProvince','orgContact','orgEmail'].forEach(id=>setv(id,''));setv('orgType','Factory');setv('orgControlled','General Organization');text('orgFormTitle','เพิ่มองค์กร')}
+async function saveOrganization(){const payload={organization_code:v('orgCode').trim(),organization_name:v('orgName').trim(),business_type:v('orgBusiness').trim()||null,organization_type:v('orgType'),province:v('orgProvince').trim()||null,contact_name:v('orgContact').trim()||null,contact_email:v('orgEmail').trim()||null,controlled_status:v('orgControlled')};if(!payload.organization_code||!payload.organization_name){alert('กรุณากรอก Code และ Name');return}const id=v('orgId');let q=id?sb.from('organizations').update(payload).eq('id',id):sb.from('organizations').insert(payload);const {error}=await q;if(error){alert('บันทึกองค์กรไม่สำเร็จ: '+error.message);return}alert('บันทึกองค์กรเรียบร้อย');resetOrgForm();await loadUsersOrgs();await loadAudit()}
+async function deleteOrg(id){const o=orgsCache.find(x=>x.id===id);if(!confirm('ลบองค์กร '+(o?.organization_name||'')+' ? ข้อมูลที่อ้างอิงองค์กรอาจทำให้ลบไม่ได้'))return;const {error}=await sb.from('organizations').delete().eq('id',id);if(error){alert('ลบไม่สำเร็จ: '+error.message);return}await loadUsersOrgs();await loadAudit()}
+function factorTab(t){document.getElementById('efPanel').classList.toggle('hidden',t!=='ef');document.getElementById('cfPanel').classList.toggle('hidden',t!=='cf');document.getElementById('tabEF').classList.toggle('active',t==='ef');document.getElementById('tabCF').classList.toggle('active',t==='cf')}
+async function loadFactors(){const [{data:ef,error:e1},{data:cf,error:e2}]=await Promise.all([sb.from('emission_factors').select('*').order('activity_name'),sb.from('conversion_factors').select('*').order('energy_type')]);if(e1||e2){alert('โหลด Factor ไม่สำเร็จ');return}efCache=ef||[];cfCache=cf||[];renderEF();renderCF()}
+function renderEF(){const body=document.getElementById('efBody');body.innerHTML='';efCache.forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(f.activity_name)}</td><td>${f.scope}</td><td>${esc(f.unit)}</td><td>${num(f.factor_value)}</td><td>${esc(f.version)}</td><td>${esc(f.source_reference||'-')}</td><td><span class="status ${f.active_status===false?'off':'ok'}">${f.active_status===false?'Inactive':'Active'}</span></td><td><button class="btn small" onclick="editEF('${f.id}')">Edit</button> <button class="btn small dangerBtn" onclick="deleteEF('${f.id}')">Delete</button></td>`;body.appendChild(tr)})}
+function editEF(id){const f=efCache.find(x=>x.id===id);if(!f)return;setv('efId',f.id);setv('efActivity',f.activity_name);setv('efCategory',f.category);setv('efScope',String(f.scope));setv('efUnit',f.unit);setv('efValue',f.factor_value);setv('efFactorUnit',f.factor_unit);setv('efYear',f.published_year||'');setv('efVersion',f.version);setv('efFrom',f.valid_from||'');setv('efTo',f.valid_to||'');setv('efSource',f.source_reference||'');setv('efActive',String(f.active_status!==false));text('efFormTitle','แก้ไข Emission Factor')}
+function resetEFForm(){['efId','efActivity','efCategory','efUnit','efValue','efFactorUnit','efYear','efVersion','efFrom','efTo','efSource'].forEach(id=>setv(id,''));setv('efScope','1');setv('efActive','true');text('efFormTitle','เพิ่ม Emission Factor')}
+async function saveEF(){const payload={organization_id:null,activity_name:v('efActivity').trim(),category:v('efCategory').trim(),scope:Number(v('efScope')),unit:v('efUnit').trim(),factor_value:Number(v('efValue')),factor_unit:v('efFactorUnit').trim(),published_year:v('efYear')?Number(v('efYear')):null,version:v('efVersion').trim(),valid_from:v('efFrom'),valid_to:v('efTo')||null,source_reference:v('efSource').trim()||null,active_status:v('efActive')==='true'};if(!payload.activity_name||!payload.category||!payload.unit||!payload.factor_unit||!payload.version||!payload.valid_from||!Number.isFinite(payload.factor_value)){alert('กรอกข้อมูล EF ให้ครบ');return}const id=v('efId');const {error}=await (id?sb.from('emission_factors').update(payload).eq('id',id):sb.from('emission_factors').insert(payload));if(error){alert('บันทึก EF ไม่สำเร็จ: '+error.message);return}alert('บันทึก EF เรียบร้อย');resetEFForm();await loadFactors();await loadAudit()}
+async function deleteEF(id){if(!confirm('ลบ Emission Factor นี้? หากมี Carbon Record อ้างอิงอยู่ ระบบอาจไม่อนุญาต'))return;const {error}=await sb.from('emission_factors').delete().eq('id',id);if(error){alert('ลบไม่สำเร็จ: '+error.message);return}await loadFactors();await loadAudit()}
+function renderCF(){const body=document.getElementById('cfBody');body.innerHTML='';cfCache.forEach(f=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(f.energy_type)}</td><td>${esc(f.source_unit)}</td><td>${esc(f.target_unit)}</td><td>${num(f.conversion_factor)}</td><td>${esc(f.version)}</td><td>${esc(f.source_reference||'-')}</td><td><span class="status ${f.active_status===false?'off':'ok'}">${f.active_status===false?'Inactive':'Active'}</span></td><td><button class="btn small" onclick="editCF('${f.id}')">Edit</button> <button class="btn small dangerBtn" onclick="deleteCF('${f.id}')">Delete</button></td>`;body.appendChild(tr)})}
+function editCF(id){const f=cfCache.find(x=>x.id===id);if(!f)return;setv('cfId',f.id);setv('cfEnergy',f.energy_type);setv('cfSourceUnit',f.source_unit);setv('cfTargetUnit',f.target_unit);setv('cfValue',f.conversion_factor);setv('cfVersion',f.version);setv('cfFrom',f.valid_from||'');setv('cfTo',f.valid_to||'');setv('cfSource',f.source_reference||'');setv('cfActive',String(f.active_status!==false));text('cfFormTitle','แก้ไข Conversion Factor')}
+function resetCFForm(){['cfId','cfEnergy','cfSourceUnit','cfValue','cfVersion','cfFrom','cfTo','cfSource'].forEach(id=>setv(id,''));setv('cfTargetUnit','MJ');setv('cfActive','true');text('cfFormTitle','เพิ่ม Conversion Factor')}
+async function saveCF(){const payload={organization_id:null,energy_type:v('cfEnergy').trim(),source_unit:v('cfSourceUnit').trim(),target_unit:v('cfTargetUnit').trim(),conversion_factor:Number(v('cfValue')),version:v('cfVersion').trim(),valid_from:v('cfFrom'),valid_to:v('cfTo')||null,source_reference:v('cfSource').trim()||null,active_status:v('cfActive')==='true'};if(!payload.energy_type||!payload.source_unit||!payload.target_unit||!payload.version||!payload.valid_from||!Number.isFinite(payload.conversion_factor)){alert('กรอกข้อมูล Conversion Factor ให้ครบ');return}const id=v('cfId');const {error}=await (id?sb.from('conversion_factors').update(payload).eq('id',id):sb.from('conversion_factors').insert(payload));if(error){alert('บันทึก Conversion Factor ไม่สำเร็จ: '+error.message);return}alert('บันทึก Conversion Factor เรียบร้อย');resetCFForm();await loadFactors();await loadAudit()}
+async function deleteCF(id){if(!confirm('ลบ Conversion Factor นี้? หาก Energy Record อ้างอิงอยู่ ระบบอาจไม่อนุญาต'))return;const {error}=await sb.from('conversion_factors').delete().eq('id',id);if(error){alert('ลบไม่สำเร็จ: '+error.message);return}await loadFactors();await loadAudit()}
+async function loadAudit(){const {data,error}=await sb.from('audit_logs').select('id,user_id,organization_id,module_name,action,record_id,timestamp').order('timestamp',{ascending:false}).limit(300);if(error){console.warn(error);auditCache=[];renderAudit();return}auditCache=data||[];renderAudit()}
+function renderAudit(){const q=(v('auditSearch')||'').toLowerCase();const userMap=Object.fromEntries(usersCache.map(x=>[x.id,x.email||x.full_name||x.id]));const orgMap=Object.fromEntries(orgsCache.map(x=>[x.id,x.organization_name]));const rows=auditCache.filter(x=>!q||[x.module_name,x.action,x.record_id,userMap[x.user_id],orgMap[x.organization_id]].some(y=>String(y||'').toLowerCase().includes(q)));const body=document.getElementById('auditBody');body.innerHTML='';rows.forEach(a=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${esc(fmtDate(a.timestamp))}</td><td>${esc(userMap[a.user_id]||a.user_id||'-')}</td><td>${esc(a.module_name)}</td><td>${esc(a.action)}</td><td>${esc(a.record_id||'-')}</td><td>${esc(orgMap[a.organization_id]||'-')}</td>`;body.appendChild(tr)})}
+function v(id){const e=document.getElementById(id);return e?e.value:''}function setv(id,val){const e=document.getElementById(id);if(e)e.value=val??''}function text(id,val){const e=document.getElementById(id);if(e)e.textContent=val??''}function show(id){document.getElementById(id)?.classList.remove('hidden')}function hide(id){document.getElementById(id)?.classList.add('hidden')}function esc(vv){return String(vv??'').replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]))}function num(x){const n=Number(x);return Number.isFinite(n)?n.toLocaleString('th-TH',{maximumFractionDigits:8}):'-'}function fmtDate(x){if(!x)return'-';return new Date(x).toLocaleString('th-TH')}
 boot();
 </script>
 </body>
