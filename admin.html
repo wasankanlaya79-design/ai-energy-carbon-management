@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin • AI Energy & Carbon Management</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#667085;--line:#dfe6ef;--nav:#0b1f33;--pri:#0f766e;--danger:#b42318;--shadow:0 8px 28px rgba(20,35,60,.08)}
+    *{box-sizing:border-box}body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}
+    .layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{background:var(--nav);color:white;padding:22px 16px}.brand{font-size:20px;font-weight:700;margin:0 8px 20px}.brand small{display:block;color:#95d9d3;font-size:12px;margin-top:6px}.side a,.side button{display:block;width:100%;text-align:left;padding:11px 12px;border-radius:9px;border:0;background:transparent;color:#d9e5ef;text-decoration:none;cursor:pointer;font:inherit}.side a:hover,.side button:hover{background:#143550;color:#fff}
+    .main{padding:24px}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top h1{margin:0}.badge{background:#e7f8f5;color:#0f766e;padding:7px 10px;border-radius:999px;font-weight:700;font-size:12px}.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}.kpi{grid-column:span 3}.span12{grid-column:span 12}.span6{grid-column:span 6}.value{font-size:28px;font-weight:800;margin-top:8px}.label{font-size:12px;color:var(--muted)}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}th{background:#f8fafc;color:var(--muted)}select,input{padding:8px;border:1px solid var(--line);border-radius:8px;background:white}.btn{border:0;background:var(--pri);color:white;padding:9px 12px;border-radius:8px;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.danger{color:var(--danger)}.notice{padding:12px 14px;border-radius:10px;background:#eef7ff;border:1px solid #cfe5ff;margin-bottom:16px}.hidden{display:none}.muted{color:var(--muted);font-size:12px}.login{max-width:440px;margin:10vh auto}.login .card{padding:24px}.field{margin:12px 0}.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}.field input{width:100%;padding:11px}
+    @media(max-width:900px){.layout{grid-template-columns:1fr}.side{display:none}.kpi{grid-column:span 6}.span6{grid-column:span 12}}
+  </style>
+</head>
+<body>
+<div id="loginView" class="login">
+  <div class="card">
+    <h2>เข้าสู่ระบบหลังบ้าน</h2>
+    <div class="muted">สำหรับ Super Admin เท่านั้น</div>
+    <div class="field"><label>Email</label><input id="email" type="email"></div>
+    <div class="field"><label>Password</label><input id="password" type="password"></div>
+    <button class="btn" onclick="login()">เข้าสู่ระบบ</button>
+    <div id="loginMsg" class="muted" style="margin-top:12px"></div>
+  </div>
+</div>
+
+<div id="adminView" class="layout hidden">
+  <aside class="side">
+    <div class="brand">Admin Backoffice<small>AI Energy & Carbon Management</small></div>
+    <a href="./index.html">← กลับหน้าเว็บหลัก</a>
+    <button onclick="loadAll()">Refresh Data</button>
+    <button onclick="logout()">Logout</button>
+  </aside>
+  <main class="main">
+    <div class="top"><div><h1>Super Admin Dashboard</h1><div class="muted" id="who"></div></div><div class="badge">OWNER / SUPER ADMIN</div></div>
+    <div class="notice">หลังบ้านนี้ใช้สำหรับจัดการผู้ใช้ องค์กร และตรวจสถานะข้อมูลระบบทั้งหมด</div>
+    <div class="grid">
+      <div class="card kpi"><div class="label">Users</div><div class="value" id="nUsers">-</div></div>
+      <div class="card kpi"><div class="label">Organizations</div><div class="value" id="nOrgs">-</div></div>
+      <div class="card kpi"><div class="label">Energy Records</div><div class="value" id="nEnergy">-</div></div>
+      <div class="card kpi"><div class="label">Carbon Records</div><div class="value" id="nCarbon">-</div></div>
+
+      <div class="card span12"><h3>จัดการผู้ใช้</h3><div class="muted">Super Admin สามารถเปลี่ยน Role และเปิด/ปิดบัญชีได้</div><br><div style="overflow:auto"><table><thead><tr><th>ชื่อ</th><th>อีเมล</th><th>Role</th><th>องค์กร</th><th>สถานะ</th><th>Action</th></tr></thead><tbody id="usersBody"></tbody></table></div></div>
+
+      <div class="card span6"><h3>Organizations</h3><div style="overflow:auto"><table><thead><tr><th>Code</th><th>Name</th><th>Type</th></tr></thead><tbody id="orgBody"></tbody></table></div></div>
+      <div class="card span6"><h3>System Status</h3><table><tbody><tr><td>Conversion Factors</td><td id="nConv">-</td></tr><tr><td>Emission Factors</td><td id="nEF">-</td></tr><tr><td>Sites</td><td id="nSites">-</td></tr><tr><td>Departments</td><td id="nDept">-</td></tr></tbody></table></div>
+    </div>
+  </main>
+</div>
+<script>
+const SUPABASE_URL='https://fjkhhnuftrzpssodaeho.supabase.co';
+const SUPABASE_KEY='sb_publishable_05iZBWSteuTbG1z6W9tFrA_T99xb-jE';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const roles=['super_admin','org_admin','energy_manager','department_user','auditor','executive','viewer'];
+let currentProfile=null;
+
+async function login(){
+  const email=document.getElementById('email').value.trim();
+  const password=document.getElementById('password').value;
+  const m=document.getElementById('loginMsg');m.textContent='กำลังเข้าสู่ระบบ...';
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  if(error){m.textContent=error.message;return}
+  await boot();
+}
+async function logout(){await sb.auth.signOut();location.reload()}
+async function boot(){
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user){document.getElementById('loginView').classList.remove('hidden');return}
+  const {data:p,error}=await sb.from('profiles').select('id,full_name,email,role,organization_id,active_status').eq('id',user.id).single();
+  if(error||!p){document.getElementById('loginMsg').textContent='ไม่พบ Profile';return}
+  currentProfile=p;
+  if(p.role!=='super_admin'){
+    document.getElementById('loginMsg').innerHTML='<span class="danger">บัญชีนี้ไม่มีสิทธิ์ Super Admin (Role: '+escapeHtml(p.role)+')</span>';
+    document.getElementById('loginView').classList.remove('hidden');
+    return;
+  }
+  document.getElementById('loginView').classList.add('hidden');document.getElementById('adminView').classList.remove('hidden');
+  document.getElementById('who').textContent=(p.full_name||p.email||'Super Admin')+' • '+p.role;
+  await loadAll();
+}
+async function countTable(table,id){const {count,error}=await sb.from(table).select('*',{count:'exact',head:true});document.getElementById(id).textContent=error?'ERR':(count??0)}
+async function loadAll(){
+  await Promise.all([countTable('profiles','nUsers'),countTable('organizations','nOrgs'),countTable('energy_records','nEnergy'),countTable('carbon_records','nCarbon'),countTable('conversion_factors','nConv'),countTable('emission_factors','nEF'),countTable('sites','nSites'),countTable('departments','nDept')]);
+  const [{data:users,error:uerr},{data:orgs,error:oerr}]=await Promise.all([
+    sb.from('profiles').select('id,full_name,email,role,organization_id,active_status,created_at').order('created_at',{ascending:true}),
+    sb.from('organizations').select('id,organization_code,organization_name,organization_type').order('organization_name')
+  ]);
+  const orgMap=Object.fromEntries((orgs||[]).map(o=>[o.id,o.organization_name]));
+  const ub=document.getElementById('usersBody');ub.innerHTML='';
+  (users||[]).forEach(u=>{
+    const tr=document.createElement('tr');
+    const opts=roles.map(r=>`<option value="${r}" ${u.role===r?'selected':''}>${r}</option>`).join('');
+    tr.innerHTML=`<td>${escapeHtml(u.full_name||'-')}</td><td>${escapeHtml(u.email||'-')}</td><td><select id="role_${u.id}">${opts}</select></td><td>${escapeHtml(orgMap[u.organization_id]||'-')}</td><td><select id="active_${u.id}"><option value="true" ${u.active_status!==false?'selected':''}>Active</option><option value="false" ${u.active_status===false?'selected':''}>Disabled</option></select></td><td><button class="btn" onclick="saveUser('${u.id}')">Save</button></td>`;
+    ub.appendChild(tr);
+  });
+  const ob=document.getElementById('orgBody');ob.innerHTML='';
+  (orgs||[]).forEach(o=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${escapeHtml(o.organization_code||'-')}</td><td>${escapeHtml(o.organization_name||'-')}</td><td>${escapeHtml(o.organization_type||'-')}</td>`;ob.appendChild(tr)});
+  if(uerr||oerr) alert('โหลดข้อมูลบางส่วนไม่สำเร็จ');
+}
+async function saveUser(id){
+  const role=document.getElementById('role_'+id).value;
+  const active_status=document.getElementById('active_'+id).value==='true';
+  if(id===currentProfile.id && role!=='super_admin'){if(!confirm('คุณกำลังลดสิทธิ์ Super Admin ของตัวเอง ยืนยันหรือไม่?'))return}
+  const {error}=await sb.from('profiles').update({role,active_status}).eq('id',id);
+  if(error){alert('บันทึกไม่สำเร็จ: '+error.message);return}
+  alert('บันทึกสิทธิ์เรียบร้อย');await loadAll();
+}
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+boot();
+</script>
+</body>
+</html>
