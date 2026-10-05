@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Account • AI Energy & Carbon</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#f4f7fb;--panel:#fff;--ink:#172033;--muted:#667085;--line:#dfe6ef;--pri:#0f766e;--danger:#b42318;--ok:#15803d;--shadow:0 8px 28px rgba(20,35,60,.08)}*{box-sizing:border-box}body{margin:0;font-family:Tahoma,"Noto Sans Thai",Arial,sans-serif;background:var(--bg);color:var(--ink)}.wrap{max-width:560px;margin:6vh auto;padding:16px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px;box-shadow:var(--shadow);margin-bottom:14px}h1,h2{margin-top:0}.field{margin:12px 0}.field label{display:block;color:var(--muted);font-size:12px;margin-bottom:6px}input{width:100%;padding:11px;border:1px solid var(--line);border-radius:9px;font:inherit}.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--pri);color:#fff;font-weight:700;cursor:pointer}.btn.secondary{background:#e8eef5;color:#24364f}.muted{color:var(--muted);font-size:12px;line-height:1.6}.msg{margin-top:12px;padding:10px 12px;border-radius:9px;background:#f8fafc;border:1px solid var(--line);font-size:13px}.ok{color:var(--ok)}.bad{color:var(--danger)}.hidden{display:none}.actions{display:flex;gap:8px;flex-wrap:wrap}a{color:var(--pri)}
+</style>
+</head><body><div class="wrap">
+<div class="card"><h1>Account Security</h1><div class="muted">AI Energy & Carbon Management System</div><div id="status" class="msg">กำลังตรวจสอบสถานะบัญชี...</div></div>
+
+<div class="card" id="forgotCard"><h2>ลืมรหัสผ่าน</h2><div class="muted">กรอกอีเมล ระบบจะส่งลิงก์ Reset Password ไปยังอีเมลนั้น</div><div class="field"><label>Email</label><input id="forgotEmail" type="email" autocomplete="email"></div><button class="btn" onclick="sendReset()">ส่ง Reset Password Email</button><div id="forgotMsg" class="msg hidden"></div></div>
+
+<div class="card hidden" id="passwordCard"><h2>ตั้ง / เปลี่ยนรหัสผ่าน</h2><div class="muted">หน้านี้ใช้ได้หลัง Login, คลิกลิงก์ Invite หรือคลิกลิงก์ Reset Password จากอีเมล</div><div class="field"><label>รหัสผ่านใหม่</label><input id="newPassword" type="password" autocomplete="new-password" placeholder="อย่างน้อย 8 ตัวอักษร"></div><div class="field"><label>ยืนยันรหัสผ่านใหม่</label><input id="confirmPassword" type="password" autocomplete="new-password"></div><div class="actions"><button class="btn" onclick="changePassword()">บันทึกรหัสผ่านใหม่</button><button class="btn secondary" onclick="signOut()">Logout</button></div><div id="passwordMsg" class="msg hidden"></div></div>
+
+<div class="card"><div class="actions"><a href="./index.html">← กลับหน้าเว็บหลัก</a><a href="./admin.html">Admin Backoffice</a></div></div>
+</div>
+<script>
+const SUPABASE_URL='https://fjkhhnuftrzpssodaeho.supabase.co';
+const SUPABASE_KEY='sb_publishable_05iZBWSteuTbG1z6W9tFrA_T99xb-jE';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const REDIRECT_URL='https://wasankanlaya79-design.github.io/ai-energy-carbon-management/account.html';
+function show(id,text,ok=true){const el=document.getElementById(id);el.classList.remove('hidden');el.innerHTML=`<span class="${ok?'ok':'bad'}">${escapeHtml(text)}</span>`}
+function escapeHtml(v){return String(v??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+async function refreshStatus(){const {data:{session}}=await sb.auth.getSession();const st=document.getElementById('status');if(session?.user){st.innerHTML=`เข้าสู่ระบบแล้ว: <b>${escapeHtml(session.user.email||'')}</b>`;document.getElementById('passwordCard').classList.remove('hidden')}else{st.textContent='ยังไม่ได้เข้าสู่ระบบ — สามารถขอ Reset Password ได้ด้านล่าง';document.getElementById('passwordCard').classList.add('hidden')}}
+async function sendReset(){const email=document.getElementById('forgotEmail').value.trim();if(!email){show('forgotMsg','กรุณากรอกอีเมล',false);return}show('forgotMsg','กำลังส่งอีเมล...');const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:REDIRECT_URL});if(error){show('forgotMsg',error.message,false);return}show('forgotMsg','ส่งอีเมลแล้ว หากอีเมลนี้มีบัญชีอยู่ ให้เปิดลิงก์ Reset Password ในกล่องจดหมาย')}
+async function changePassword(){const p=document.getElementById('newPassword').value;const c=document.getElementById('confirmPassword').value;if(p.length<8){show('passwordMsg','รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร',false);return}if(p!==c){show('passwordMsg','รหัสผ่านทั้งสองช่องไม่ตรงกัน',false);return}const {error}=await sb.auth.updateUser({password:p});if(error){show('passwordMsg',error.message,false);return}show('passwordMsg','เปลี่ยนรหัสผ่านเรียบร้อยแล้ว')}
+async function signOut(){await sb.auth.signOut();location.href='./index.html'}
+sb.auth.onAuthStateChange(async(event,session)=>{await refreshStatus();if(event==='PASSWORD_RECOVERY'){document.getElementById('passwordCard').classList.remove('hidden');show('passwordMsg','ลิงก์ Reset Password ถูกยืนยันแล้ว กรุณาตั้งรหัสผ่านใหม่')}});
+refreshStatus();
+</script></body></html>
